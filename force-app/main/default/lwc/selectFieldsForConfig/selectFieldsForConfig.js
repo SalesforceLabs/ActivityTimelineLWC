@@ -152,6 +152,10 @@ export default class SelectFieldsForConfig extends LightningElement {
                     //Search for selected field in current selected list;
                     let filteredFields = this.selectedFieldList.filter(fld => fld.apiName == event.detail.selectedRows[i].apiName);
                     if (!filteredFields || filteredFields.length == 0) {
+                        if (this.stepName == 'Date Field') {
+                            // when step name is Date Field, only one field can be selected
+                            this.selectedFieldList = [];
+                        }
                         this.selectedFieldList.push(event.detail.selectedRows[i]);
                     }
                 }
