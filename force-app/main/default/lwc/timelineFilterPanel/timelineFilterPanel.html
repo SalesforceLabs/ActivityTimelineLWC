@@ -2,10 +2,10 @@
     <div class="slds-no-flex slds-float_right slds-is-relative">
         <template if:true={showExpandCollapse}>
             <a class="slds-button" role="button" onclick={expandCollapseAll}>
-                {expandCollapseAltText}&nbsp;
+                <lightning-button-icon icon-name="utility:expand_all" alternative-text={expandCollapseAltText} size="small">
+                </lightning-button-icon>
             </a>
         </template>
-
         <a class="slds-button" role="button" onclick={showHideFilters}>
             <lightning-button-icon icon-name="utility:filterList" alternative-text={filterAltText} size="small">
             </lightning-button-icon>

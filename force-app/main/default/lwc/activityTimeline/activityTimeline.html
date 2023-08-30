@@ -51,8 +51,8 @@
                 </div>
             </header>
         </div>
-        <article if:true={isParametersValid} style="margin:4px">
-            <ul if:false={error} class="slds-timeline slds-m-around_small remove-margin-top">
+        <article if:true={isParametersValid} class="slds-card__header" style="padding-top:0px">
+            <ul if:false={error} class="slds-timeline remove-margin-top">
                 <template if:false={isLoading}>
                     <template if:true={hasTimelineData}>
                         <template if:true={showSearch}>
