@@ -472,6 +472,14 @@ export default class ActivityTimeline extends LightningElement {
         return false;
     }
 
+    get headerStyling() {
+        if (this.showActions) {
+            return 'float:left;width:100%';
+        } else {
+            return 'position:absolute;width:70%';
+        }
+    }
+
     get filterStyles() {
         let filterStyle = '';
         if (this.showFilter) {
