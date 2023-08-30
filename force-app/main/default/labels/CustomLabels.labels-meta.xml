@@ -25,6 +25,14 @@
         <value>Apply</value>
     </labels>
     <labels>
+        <fullName>Collapse_All</fullName>
+        <categories>Activity Timeline</categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Collapse All</shortDescription>
+        <value>Collapse All</value>
+    </labels>
+    <labels>
         <fullName>Date_Range</fullName>
         <categories>Activity Timeline</categories>
         <language>en_US</language>
@@ -55,6 +63,14 @@
         <protected>false</protected>
         <shortDescription>Error loading data</shortDescription>
         <value>Error loading data</value>
+    </labels>
+    <labels>
+        <fullName>Expand_All</fullName>
+        <categories>Activity Timeline</categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Expand All</shortDescription>
+        <value>Expand All</value>
     </labels>
     <labels>
         <fullName>Filter</fullName>
@@ -129,12 +145,36 @@
         <value>No Subject</value>
     </labels>
     <labels>
+        <fullName>No_action_selected</fullName>
+        <categories>Activity Timeline</categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>No action selected</shortDescription>
+        <value>No action selected</value>
+    </labels>
+    <labels>
         <fullName>No_data_found</fullName>
         <categories>Activity Timeline</categories>
         <language>en_US</language>
         <protected>false</protected>
         <shortDescription>No data found</shortDescription>
         <value>No data found</value>
+    </labels>
+    <labels>
+        <fullName>Note</fullName>
+        <categories>Activity Timeline</categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Note</shortDescription>
+        <value>Note</value>
+    </labels>
+    <labels>
+        <fullName>Notes</fullName>
+        <categories>Activity Timeline</categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Notes</shortDescription>
+        <value>Notes</value>
     </labels>
     <labels>
         <fullName>Overdue</fullName>
@@ -151,6 +191,14 @@
         <protected>false</protected>
         <shortDescription>Refresh Data</shortDescription>
         <value>Refresh Data</value>
+    </labels>
+    <labels>
+        <fullName>Search</fullName>
+        <categories>timeline</categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Search</shortDescription>
+        <value>Search</value>
     </labels>
     <labels>
         <fullName>Select_Objects</fullName>
@@ -229,8 +277,8 @@
         <categories>Activity Timeline</categories>
         <language>en_US</language>
         <protected>false</protected>
-        <shortDescription>have an upoming task with</shortDescription>
-        <value>have an upoming task with</value>
+        <shortDescription>have an upcoming task with</shortDescription>
+        <value>have an upcoming task with</value>
     </labels>
     <labels>
         <fullName>logged_a_call_with</fullName>

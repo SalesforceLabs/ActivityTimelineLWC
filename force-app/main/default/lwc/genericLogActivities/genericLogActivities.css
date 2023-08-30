@@ -1,0 +1,10 @@
+.iconButton {
+    border: 1px solid rgb(116 116 116);
+    padding-left: 15px;
+    padding-right: 15px;
+    border-radius: .25rem;
+    cursor: pointer;
+}
+.iconButton:hover {
+    background-color: rgb(243, 243, 243);
+}

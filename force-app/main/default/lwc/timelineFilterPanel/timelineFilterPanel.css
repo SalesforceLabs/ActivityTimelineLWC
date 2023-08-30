@@ -1,6 +1,7 @@
 .filterPopover{
     z-index:20;
     position:absolute;
-    top:2.25rem;left:-210px;
+    top:2.25rem;
+    right:38px;
     width:300px;
 }

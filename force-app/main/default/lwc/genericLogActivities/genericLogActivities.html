@@ -1,0 +1,25 @@
+<template>
+    <div class="slds-var-m-left_x-small" style="margin-left:0px">
+        <template if:true={newCallAction}>
+            <lightning-button-group>
+                <div onclick={handleCall} class="iconButton">
+                    <lightning-icon title="Log a call" icon-name="standard:log_a_call" size="small" class="slds-icon-standard-log-a-call slds-icon_container slds-var-m-top_xxx-small slds-var-m-bottom_xxx-small"></lightning-icon>
+                </div>
+            </lightning-button-group>
+        </template>
+        <template if:true={newTaskAction}>
+            <lightning-button-group>
+                <div onclick={handleTask} class="iconButton">
+                    <lightning-icon title="New Task" icon-name="standard:task" size="small" class="slds-icon-standard-task slds-icon_container slds-var-m-top_xxx-small slds-var-m-bottom_xxx-small"></lightning-icon>
+                </div>
+            </lightning-button-group>
+        </template>
+        <template if:true={newEventAction}>
+            <lightning-button-group>
+                <div onclick={handleEvent} class="iconButton">
+                    <lightning-icon title="New Meeting" icon-name="standard:event" size="small" class="slds-icon-standard-meeting slds-icon_container slds-var-m-top_xxx-small slds-var-m-bottom_xxx-small"></lightning-icon>
+                </div>
+            </lightning-button-group>
+        </template>
+    </div>
+</template>

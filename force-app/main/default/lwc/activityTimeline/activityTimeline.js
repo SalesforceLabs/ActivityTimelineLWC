@@ -32,6 +32,10 @@ export default class ActivityTimeline extends LightningElement {
     @api headerTitle;
     @api headerIcon;
     @api showHeader = false;
+    @api showButtons = false;
+    @api newTaskAction;
+    @api newEventAction;
+    @api newCallAction;
     @api additionalMargin;
     @api availableObjects;
     @api initialObjectSelection;
@@ -50,6 +54,7 @@ export default class ActivityTimeline extends LightningElement {
     @track serverData;
     @track searchText;
     @api noDataFoundWarnCss;
+    @api objectName;
 
     @wire(MessageContext)
     messageContext;
@@ -112,6 +117,7 @@ export default class ActivityTimeline extends LightningElement {
             this.hasTimelineData = false;
             if (data) {
                 this.serverData=data;
+                this.objectName=data.configuration.timeline__Object__c;
                 this.childRecords = new Array();
                 let unsortedRecords = new Array();
                 //have to deep clone in order to Task and other standard objects
@@ -450,6 +456,20 @@ export default class ActivityTimeline extends LightningElement {
         } else {
             return 'slds-card';
         }
+    }
+
+    get showActions() {
+        if ((this.newCallAction != null || this.newTaskAction != null || this.newEventAction != null)) {
+            return true;
+        }
+        return false;
+    }
+
+    get showHeaderIcon() {
+        if (this.headerIcon != null && this.headerIcon != '') {
+            return true;
+        }
+        return false;
     }
 
     get filterStyles() {

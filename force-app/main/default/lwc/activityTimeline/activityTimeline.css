@@ -9,3 +9,12 @@
     margin-right: var(--lwc-spacingSmall);
     margin-left: var(--lwc-spacingSmall);
 }
+.no-padding {
+    padding: 0px;
+}
+.smaller-bottom-margin {
+    margin-bottom: 4px;
+}
+.remove-margin-top {
+    margin-top: 0px;
+}

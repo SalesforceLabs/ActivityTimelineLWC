@@ -7,36 +7,57 @@
 
 <template>
     <div class="slds-card">
-        <div class="slds-card__header slds-grid">
+        <div class="slds-card__header slds-grid smaller-bottom-margin">
             <header class="slds-media slds-media_center slds-has-flexi-truncate">
-                <template if:true={showHeader}>
-                    <lightning-icon icon-name={headerIcon} class="slds-m-around_xx-small"></lightning-icon>
-                    <div class="slds-media__body">
-                        <h2 class="slds-card__header-title">
-                            <a href="#" class="slds-card__header-link slds-truncate" title={headerTitle}>
-                                <span>{headerTitle}</span>
-                            </a>
-                        </h2>
-                    </div>
-                </template>
-                <template if:false={showHeader}>
-                    <div class="slds-media__body">
-                        <h2 class="slds-card__header-title">
-                            &nbsp;
-                        </h2>
-                    </div>
-                </template>
-                <c-timeline-filter-panel object-filters={filteredObjects} available-objects={availableObjects}
-                    onchange={handleFilterChange} onexpandcollapse={handleExpandCollapseEvent} show-expand-collapse={showExpandCollapse}></c-timeline-filter-panel>
+                <div style="width:100%">
+                    <template if:true={showHeader}>
+                        <!-- show header float left -->
+                        <div style="float:left;width:80%">
+                            <div style="width:100%;height:38px">
+                                <template if:true={showHeaderIcon}>
+                                    <div style="float:left;width:45px">
+                                        <lightning-icon icon-name={headerIcon} class="slds-m-around_xx-small" style="margin:0px"></lightning-icon>
+                                    </div>
+                                </template>
+                                <div style="padding-top: 5px">
+                                    <h2 class="slds-card__header-title">
+                                        <a href="#" class="slds-card__header-link" title={headerTitle}>
+                                            <span>{headerTitle}</span>
+                                        </a>
+                                    </h2>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                    <template if:false={showActions}>
+                        <!-- show filters next to header float right -->
+                        <div style="float:right;width:20%">
+                            <c-timeline-filter-panel object-filters={filteredObjects} available-objects={availableObjects}
+                            onchange={handleFilterChange} onexpandcollapse={handleExpandCollapseEvent} show-expand-collapse={showExpandCollapse}></c-timeline-filter-panel>
+                        </div>
+                    </template>
+                    <template if:true={showActions}>
+                        <div style="width:100%;clear:both">
+                            <div style="float:left">
+                                <c-generic-log-activities record-id={recordId} object-name={objectName} new-task-action={newTaskAction} 
+                                new-event-action={newEventAction} new-call-action={newCallAction}></c-generic-log-activities>
+                            </div>
+                            <div style="float:right">
+                                <c-timeline-filter-panel object-filters={filteredObjects} available-objects={availableObjects}
+                                onchange={handleFilterChange} onexpandcollapse={handleExpandCollapseEvent} show-expand-collapse={showExpandCollapse}></c-timeline-filter-panel>
+                            </div>
+                        </div>
+                    </template>
+                </div>
             </header>
         </div>
-        <article if:true={isParametersValid}>
-            <ul if:false={error} class="slds-timeline slds-m-around_small">
+        <article if:true={isParametersValid} style="margin:4px">
+            <ul if:false={error} class="slds-timeline slds-m-around_small remove-margin-top">
                 <template if:false={isLoading}>
                     <template if:true={hasTimelineData}>
                         <template if:true={showSearch}>
-                            <div class="slds-p-bottom_small">
-                                <lightning-input type="text" placeholder={label.Search} onchange={handleSearch}></lightning-input>
+                            <div class="slds-p-bottom_small no-padding">
+                                <lightning-input type="text" placeholder={label.Search} onchange={handleSearch} variant="label-hidden"></lightning-input>
                             </div>
                         </template>
                         <template for:each={timelineItemsByMonth} for:item="theMonth">
