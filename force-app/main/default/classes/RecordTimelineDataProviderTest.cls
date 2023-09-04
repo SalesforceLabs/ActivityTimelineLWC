@@ -69,7 +69,7 @@ public with sharing class RecordTimelineDataProviderTest {
 
     @isTest static void testGetEmailDetails(){
         Task tsk = [select Id from Task limit 1];
-        EmailMessage msg = RecordTimelineDataProvider.getEmailDetails(tsk.Id);
+        Object msg = RecordTimelineDataProvider.getEmailDetails(tsk.Id);
         System.assert(msg==null, 'Message is not null');
     }
 

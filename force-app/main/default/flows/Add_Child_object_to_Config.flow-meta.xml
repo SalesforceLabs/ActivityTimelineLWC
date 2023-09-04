@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <apiVersion>49.0</apiVersion>
     <assignments>
         <name>Assign_LWC_UI_Support</name>
         <label>Assign LWC UI Support</label>
@@ -101,6 +102,7 @@
                 </rightValue>
             </conditions>
             <connector>
+                <isGoTo>true</isGoTo>
                 <targetReference>Select_Data_provider_Apex_Class</targetReference>
             </connector>
             <label>Apex Class Invalid</label>
@@ -138,6 +140,7 @@
                 </rightValue>
             </conditions>
             <connector>
+                <isGoTo>true</isGoTo>
                 <targetReference>Add_Filter_Criteria_Details</targetReference>
             </connector>
             <label>Soql Verified No</label>
@@ -198,6 +201,7 @@
         <picklistField>Title_link_Navigate_to__c</picklistField>
         <picklistObject>Timeline_Child_Object__c</picklistObject>
     </dynamicChoiceSets>
+    <environments>Default</environments>
     <interviewLabel>Add Child object to Config {!$Flow.CurrentDateTime}</interviewLabel>
     <label>Add Child object to Config</label>
     <processMetadataValues>
@@ -392,6 +396,7 @@
                     <elementReference>var_parentRefFieldName</elementReference>
                 </value>
             </inputParameters>
+            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
             <isRequired>true</isRequired>
             <outputParameters>
                 <assignToReference>var_IsSOQLVerified</assignToReference>
@@ -429,7 +434,7 @@
             <fieldType>RadioButtons</fieldType>
             <isRequired>false</isRequired>
         </fields>
-        <helpText>&lt;p&gt;You can either display a related record or select an apex class that implements &lt;b&gt;timeline__IDataProvider&lt;/b&gt; interface.&lt;/p&gt;</helpText>
+        <helpText>&lt;p&gt;You can either display a related record or select an apex class that implements &lt;b&gt;IDataProvider&lt;/b&gt; interface.&lt;/p&gt;</helpText>
         <showFooter>true</showFooter>
         <showHeader>true</showHeader>
     </screens>
@@ -470,6 +475,7 @@
             <name>cmp_Select_Apex_Class</name>
             <extensionName>timeline:selectApexRecordProvider</extensionName>
             <fieldType>ComponentInstance</fieldType>
+            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
             <isRequired>true</isRequired>
             <outputParameters>
                 <assignToReference>selectedApexClass</assignToReference>
@@ -494,6 +500,7 @@
             <name>cmp_selectObjectColor</name>
             <extensionName>timeline:selectObjectThemeColor</extensionName>
             <fieldType>ComponentInstance</fieldType>
+            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
             <isRequired>true</isRequired>
             <outputParameters>
                 <assignToReference>var_objectColor</assignToReference>
@@ -524,6 +531,7 @@
                     <stringValue>1</stringValue>
                 </value>
             </inputParameters>
+            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
             <isRequired>true</isRequired>
         </fields>
         <fields>
@@ -536,6 +544,7 @@
                     <elementReference>recordId</elementReference>
                 </value>
             </inputParameters>
+            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
             <isRequired>true</isRequired>
             <outputParameters>
                 <assignToReference>var_childObjectApiName</assignToReference>
@@ -566,6 +575,7 @@
                     <stringValue>2</stringValue>
                 </value>
             </inputParameters>
+            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
             <isRequired>true</isRequired>
         </fields>
         <fields>
@@ -578,6 +588,7 @@
                     <elementReference>var_childObjectApiName</elementReference>
                 </value>
             </inputParameters>
+            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
             <isRequired>true</isRequired>
             <outputParameters>
                 <assignToReference>var_childObjectApiName</assignToReference>
@@ -616,6 +627,7 @@
                     <stringValue>3</stringValue>
                 </value>
             </inputParameters>
+            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
             <isRequired>true</isRequired>
         </fields>
         <fields>
@@ -676,6 +688,7 @@
                     <elementReference>var_titleField</elementReference>
                 </value>
             </inputParameters>
+            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
             <isRequired>true</isRequired>
             <outputParameters>
                 <assignToReference>var_titleField</assignToReference>
@@ -710,6 +723,7 @@
                     <stringValue>4</stringValue>
                 </value>
             </inputParameters>
+            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
             <isRequired>true</isRequired>
         </fields>
         <fields>
@@ -764,6 +778,7 @@
                     <elementReference>var_titleField</elementReference>
                 </value>
             </inputParameters>
+            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
             <isRequired>true</isRequired>
             <outputParameters>
                 <assignToReference>var_dateField</assignToReference>
@@ -794,6 +809,7 @@
                     <stringValue>5</stringValue>
                 </value>
             </inputParameters>
+            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
             <isRequired>true</isRequired>
         </fields>
         <fields>
@@ -848,6 +864,7 @@
                     <elementReference>var_titleField</elementReference>
                 </value>
             </inputParameters>
+            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
             <isRequired>true</isRequired>
             <outputParameters>
                 <assignToReference>var_fieldsToDisplay</assignToReference>
@@ -878,6 +895,7 @@
                     <stringValue>6</stringValue>
                 </value>
             </inputParameters>
+            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
             <isRequired>true</isRequired>
         </fields>
         <fields>
@@ -889,6 +907,7 @@
             <name>lwc_icon_name</name>
             <extensionName>timeline:objectIconSelector</extensionName>
             <fieldType>ComponentInstance</fieldType>
+            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
             <isRequired>true</isRequired>
             <outputParameters>
                 <assignToReference>var_iconName</assignToReference>
@@ -916,6 +935,7 @@
                     <stringValue>8</stringValue>
                 </value>
             </inputParameters>
+            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
             <isRequired>true</isRequired>
         </fields>
         <fields>
@@ -947,6 +967,7 @@
                     <stringValue>7</stringValue>
                 </value>
             </inputParameters>
+            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
             <isRequired>true</isRequired>
         </fields>
         <fields>
@@ -1025,6 +1046,7 @@
                     <elementReference>var_externalKey</elementReference>
                 </value>
             </inputParameters>
+            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
             <isRequired>true</isRequired>
         </fields>
         <showFooter>true</showFooter>
@@ -1048,6 +1070,7 @@
                     <stringValue>7</stringValue>
                 </value>
             </inputParameters>
+            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
             <isRequired>true</isRequired>
         </fields>
         <fields>
@@ -1079,6 +1102,7 @@
                     <stringValue>9</stringValue>
                 </value>
             </inputParameters>
+            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
             <isRequired>true</isRequired>
         </fields>
         <fields>
@@ -1151,6 +1175,7 @@
                     <elementReference>var_dataProviderType2</elementReference>
                 </value>
             </inputParameters>
+            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
             <isRequired>true</isRequired>
         </fields>
         <fields>
@@ -1162,6 +1187,7 @@
             <name>set_external_key</name>
             <extensionName>timeline:externalKeyField</extensionName>
             <fieldType>ComponentInstance</fieldType>
+            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
             <isRequired>true</isRequired>
             <outputParameters>
                 <assignToReference>var_externalKey</assignToReference>
@@ -1197,6 +1223,7 @@
                     <elementReference>selectedApexClass</elementReference>
                 </value>
             </inputParameters>
+            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
             <isRequired>true</isRequired>
             <outputParameters>
                 <assignToReference>apexClassVerified</assignToReference>

@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Translations xmlns="http://soap.sforce.com/2006/04/metadata">
+    <customApplications>
+        <label><!-- Timeline --></label>
+        <name>Timeline</name>
+    </customApplications>
     <customLabels>
         <label><!-- All Time --></label>
         <name>All_Time</name>
@@ -11,6 +15,10 @@
     <customLabels>
         <label>Apply</label>
         <name>Apply</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- Collapse All --></label>
+        <name>Collapse_All</name>
     </customLabels>
     <customLabels>
         <label>Date-Range</label>
@@ -27,6 +35,10 @@
     <customLabels>
         <label><!-- Error loading data --></label>
         <name>Error_loading_data</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- Expand All --></label>
+        <name>Expand_All</name>
     </customLabels>
     <customLabels>
         <label><!-- Filter --></label>
@@ -69,12 +81,24 @@
         <name>No_data_found</name>
     </customLabels>
     <customLabels>
+        <label><!-- Note --></label>
+        <name>Note</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- Notes --></label>
+        <name>Notes</name>
+    </customLabels>
+    <customLabels>
         <label><!-- Overdue --></label>
         <name>Overdue</name>
     </customLabels>
     <customLabels>
         <label><!-- Refresh Data --></label>
         <name>Refresh_Data</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- Search --></label>
+        <name>Search</name>
     </customLabels>
     <customLabels>
         <label><!-- Select Objects --></label>
@@ -113,7 +137,7 @@
         <name>have_a_task_overdue</name>
     </customLabels>
     <customLabels>
-        <label><!-- have an upoming task with --></label>
+        <label><!-- have an upcoming task with --></label>
         <name>have_a_upoming_task_with</name>
     </customLabels>
     <customLabels>
@@ -140,6 +164,10 @@
         <label><!-- sent an email to --></label>
         <name>sent_an_email_to</name>
     </customLabels>
+    <customTabs>
+        <label><!-- Timeline Diagnostic --></label>
+        <name>Timeline_Diagnostic</name>
+    </customTabs>
     <flowDefinitions>
         <flows>
             <choices>
@@ -168,6 +196,12 @@
             </screens>
             <screens>
                 <fields>
+                    <name>var_NavigationBehaviour</name>
+                </fields>
+                <name>Navigation_Behaviour</name>
+            </screens>
+            <screens>
+                <fields>
                     <name>cmp_Select_Apex_Class</name>
                 </fields>
                 <name>Select_Data_provider_Apex_Class</name>
@@ -183,12 +217,20 @@
                     <name>lwc_get_object_name</name>
                 </fields>
                 <fields>
+                    <inputParameters>
+                        <name>currentStep</name>
+                        <value/>
+                    </inputParameters>
                     <name>lwc_progress_1</name>
                 </fields>
                 <name>Step_1_Confirm_Object</name>
             </screens>
             <screens>
                 <fields>
+                    <inputParameters>
+                        <name>currentStep</name>
+                        <value/>
+                    </inputParameters>
                     <name>lwc_progress_2</name>
                 </fields>
                 <fields>
@@ -198,27 +240,51 @@
             </screens>
             <screens>
                 <fields>
+                    <inputParameters>
+                        <name>currentStep</name>
+                        <value/>
+                    </inputParameters>
                     <name>lwc_progress_3</name>
                 </fields>
                 <fields>
+                    <inputParameters>
+                        <name>stepName</name>
+                        <value/>
+                    </inputParameters>
                     <name>lwc_title_field</name>
                 </fields>
                 <name>Step_3_Select_Title_Field</name>
             </screens>
             <screens>
                 <fields>
+                    <inputParameters>
+                        <name>stepName</name>
+                        <value/>
+                    </inputParameters>
                     <name>lwc_date_field</name>
                 </fields>
                 <fields>
+                    <inputParameters>
+                        <name>currentStep</name>
+                        <value/>
+                    </inputParameters>
                     <name>lwc_progress_4</name>
                 </fields>
                 <name>Step_4_Select_Date_Field</name>
             </screens>
             <screens>
                 <fields>
+                    <inputParameters>
+                        <name>stepName</name>
+                        <value/>
+                    </inputParameters>
                     <name>lwc_display_fields</name>
                 </fields>
                 <fields>
+                    <inputParameters>
+                        <name>currentStep</name>
+                        <value/>
+                    </inputParameters>
                     <name>lwc_progress_5</name>
                 </fields>
                 <name>Step_5_Select_Display_Fields</name>
@@ -231,6 +297,10 @@
                     <name>lwc_icon_name</name>
                 </fields>
                 <fields>
+                    <inputParameters>
+                        <name>currentStep</name>
+                        <value/>
+                    </inputParameters>
                     <name>lwc_progress_6</name>
                 </fields>
                 <name>Step_6_Icon_Selection</name>
@@ -240,18 +310,66 @@
                     <name>display_confirmation</name>
                 </fields>
                 <fields>
+                    <inputParameters>
+                        <name>currentStep</name>
+                        <value/>
+                    </inputParameters>
                     <name>lwc_progress_8</name>
                 </fields>
                 <name>Step_7_Confirm_record_creation</name>
             </screens>
             <screens>
                 <fields>
+                    <inputParameters>
+                        <name>stepName</name>
+                        <value/>
+                    </inputParameters>
                     <name>lwc_confirmation</name>
                 </fields>
                 <fields>
+                    <inputParameters>
+                        <name>currentStep</name>
+                        <value/>
+                    </inputParameters>
                     <name>lwc_progress_7</name>
                 </fields>
                 <name>Step_7_Confirmation</name>
+            </screens>
+            <screens>
+                <fields>
+                    <name>Copy_1_of_display_confirmation</name>
+                </fields>
+                <fields>
+                    <inputParameters>
+                        <name>currentStep</name>
+                        <value/>
+                    </inputParameters>
+                    <name>lwc_progress_7b</name>
+                </fields>
+                <name>Step_7_Record_creation_failed</name>
+            </screens>
+            <screens>
+                <fields>
+                    <name>external_key_text</name>
+                </fields>
+                <fields>
+                    <inputParameters>
+                        <name>stepName</name>
+                        <value/>
+                    </inputParameters>
+                    <name>lwc_external_key_field</name>
+                </fields>
+                <fields>
+                    <inputParameters>
+                        <name>currentStep</name>
+                        <value/>
+                    </inputParameters>
+                    <name>lwc_progress_9</name>
+                </fields>
+                <fields>
+                    <name>set_external_key</name>
+                </fields>
+                <name>Step_9_External_Key_Field</name>
             </screens>
             <screens>
                 <fields>
@@ -265,4 +383,36 @@
         </flows>
         <fullName>Add_Child_object_to_Config</fullName>
     </flowDefinitions>
+    <quickActions>
+        <label><!-- LogACall --></label>
+        <name>LogACall</name>
+    </quickActions>
+    <quickActions>
+        <label><!-- NewCase --></label>
+        <name>NewCase</name>
+    </quickActions>
+    <quickActions>
+        <label><!-- NewContact --></label>
+        <name>NewContact</name>
+    </quickActions>
+    <quickActions>
+        <label><!-- NewEvent --></label>
+        <name>NewEvent</name>
+    </quickActions>
+    <quickActions>
+        <label><!-- NewLead --></label>
+        <name>NewLead</name>
+    </quickActions>
+    <quickActions>
+        <label><!-- NewOpportunity --></label>
+        <name>NewOpportunity</name>
+    </quickActions>
+    <quickActions>
+        <label><!-- NewTask --></label>
+        <name>NewTask</name>
+    </quickActions>
+    <quickActions>
+        <label><!-- SendEmail --></label>
+        <name>SendEmail</name>
+    </quickActions>
 </Translations>

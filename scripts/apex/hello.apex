@@ -5,15 +5,15 @@
 // You can also execute the entire file by running the command:
 //     SFDX: Execute Anonymous Apex with Editor Contents
 
-/*timeline__Timeline_Configuration__c conf = [ select Id,timeline__Object__c,timeline__Display_Relative_Dates__c,
-                                                    (SELECT timeline__Date_Field__c,timeline__Fields_to_Display__c,timeline__Icon_Image_Url__c,
-                                                            timeline__Icon_Name__c,Id,Name,timeline__Object_Color__c,timeline__Object__c,timeline__Relationship_Name__c,
-                                                            timeline__Title_Field__c,timeline__LWC_Ui_Api_Not_Supported__c,timeline__Data_Provider_Type__c,
-                                                            timeline__Provider_Apex_Classname__c,timeline__Reference_Field_Name__c,
-                                                            timeline__Where_Clause__c,timeline__Display_Object_Name__c,timeline__Title_link_Navigate_to__c,
-                                                            timeline__Overdue_Field__c,timeline__Include_All_Records__c
-                                                    FROM timeline__Timeline_Child_Objects__r)
-                                                    from timeline__Timeline_Configuration__c
+/*Timeline_Configuration__c conf = [ select Id,Object__c,Display_Relative_Dates__c,
+                                                    (SELECT Date_Field__c,Fields_to_Display__c,Icon_Image_Url__c,
+                                                            Icon_Name__c,Id,Name,Object_Color__c,Object__c,Relationship_Name__c,
+                                                            Title_Field__c,LWC_Ui_Api_Not_Supported__c,Data_Provider_Type__c,
+                                                            Provider_Apex_Classname__c,Reference_Field_Name__c,
+                                                            Where_Clause__c,Display_Object_Name__c,Title_link_Navigate_to__c,
+                                                            Overdue_Field__c,Include_All_Records__c
+                                                    FROM Timeline_Child_Objects__r)
+                                                    from Timeline_Configuration__c
                                                     where (Id='a004T000001HvKFQA0')
                                                 ];
 String recordId='0014T000002xVTxQAM';

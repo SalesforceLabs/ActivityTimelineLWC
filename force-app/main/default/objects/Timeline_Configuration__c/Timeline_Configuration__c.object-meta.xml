@@ -167,7 +167,7 @@
         <type>AutoNumber</type>
     </nameField>
     <pluralLabel>Timeline Configurations</pluralLabel>
-    <searchLayouts/>
+    <searchLayouts></searchLayouts>
     <sharingModel>ReadWrite</sharingModel>
     <visibility>Public</visibility>
 </CustomObject>

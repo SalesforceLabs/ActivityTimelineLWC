@@ -30,14 +30,14 @@ public with sharing class TimelineDiagnosticControllerTest {
 
     @IsTest static void testGetChildConfigurations(){
         Timeline_Configuration__c config = [select Id from Timeline_Configuration__c limit 1];
-        List<timeline__Timeline_Child_Object__c> configList = TimelineDiagnosticController.getChildConfigurations(config.Id);
+        List<Timeline_Child_Object__c> configList = TimelineDiagnosticController.getChildConfigurations(config.Id);
         System.assertEquals(1,configList.size(),'Incorrect child configs returned');
     }
 
     @IsTest static void testDiagnoseChildConfiguration(){
         Account acct = [select Id from Account limit 1];
         Timeline_Configuration__c config = [select Id from Timeline_Configuration__c limit 1];
-        List<timeline__Timeline_Child_Object__c> configList = TimelineDiagnosticController.getChildConfigurations(config.Id);
+        List<Timeline_Child_Object__c> configList = TimelineDiagnosticController.getChildConfigurations(config.Id);
         Timeline_Child_Object__c childConfig = configList[0];
         TimelineDiagnosticController.DiagnosticResponse resp = TimelineDiagnosticController.diagnoseChildConfiguration(acct.Id, childConfig.Id);
         System.assert(resp!=null,'Diagnostic response is null');

@@ -3,10 +3,10 @@ public with sharing class AddChildObjectToConfigController {
     @AuraEnabled(cacheable=true)
     public static string getObjectApiName(Id recordId){
         if(areObjectAndFieldsAccessible()){
-            timeline__Timeline_Configuration__c conf = [select timeline__Object__c 
-                                                        from timeline__Timeline_Configuration__c
+            Timeline_Configuration__c conf = [select Object__c 
+                                                        from Timeline_Configuration__c
                                                         where Id=:recordId ];
-            return conf.timeline__Object__c;
+            return conf.Object__c;
 
         }
         return null;

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Sub_Title_Fields__c</fullName>
+    <deprecated>false</deprecated>
+    <description>A field to hold the fields to display on sub title</description>
+    <externalId>false</externalId>
+    <inlineHelpText>A field to hold the fields to display on sub title</inlineHelpText>
+    <label>Sub Title Fields</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>TextArea</type>
+</CustomField>

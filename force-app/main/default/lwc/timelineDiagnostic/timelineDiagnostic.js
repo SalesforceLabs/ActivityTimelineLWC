@@ -19,7 +19,7 @@ export default class TimelineDiagnostic extends LightningElement {
         if(this.timelineConfigurations.data){
             for(var i=0;i<this.timelineConfigurations.data.length;i++){
                 configOptions.push({
-                    label: `${this.timelineConfigurations.data[i].Name} - ${this.timelineConfigurations.data[i].timeline__Object__c}`,
+                    label: `${this.timelineConfigurations.data[i].Name} - ${this.timelineConfigurations.data[i].Object__c}`,
                     value:`${this.timelineConfigurations.data[i].Id}`
                 })
             }

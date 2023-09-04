@@ -5,27 +5,27 @@ public with sharing class TimelineDiagnosticController {
     }
 
     @AuraEnabled(cacheable=true)
-    public static List<timeline__Timeline_Child_Object__c> getChildConfigurations(String configId){
+    public static List<Timeline_Child_Object__c> getChildConfigurations(String configId){
         return [
-            SELECT timeline__Date_Field__c,timeline__Fields_to_Display__c,timeline__Icon_Image_Url__c,
-                timeline__Icon_Name__c,Id,Name,timeline__Object_Color__c,timeline__Object__c,timeline__Relationship_Name__c,
-                timeline__Title_Field__c,timeline__LWC_Ui_Api_Not_Supported__c,timeline__Data_Provider_Type__c,
-                timeline__Provider_Apex_Classname__c,timeline__Where_Clause__c,timeline__Overdue_Field__c,
-                timeline__Include_All_Records__c
-            FROM timeline__Timeline_Child_Object__c
+            SELECT Date_Field__c,Fields_to_Display__c,Icon_Image_Url__c,
+                Icon_Name__c,Id,Name,Object_Color__c,Object__c,Relationship_Name__c,
+                Title_Field__c,LWC_Ui_Api_Not_Supported__c,Data_Provider_Type__c,
+                Provider_Apex_Classname__c,Where_Clause__c,Overdue_Field__c,
+                Include_All_Records__c
+            FROM Timeline_Child_Object__c
             where Timeline_Configuration__c = :configId];
 
     }
 
     @AuraEnabled(cacheable=false)
     public static DiagnosticResponse diagnoseChildConfiguration(Id recordId,Id childConfigId){
-        timeline__Timeline_Child_Object__c childConfig = 
-                                                    [SELECT timeline__Date_Field__c,timeline__Fields_to_Display__c,timeline__Icon_Image_Url__c,
-                                                            timeline__Icon_Name__c,Id,Name,timeline__Object_Color__c,timeline__Object__c,timeline__Relationship_Name__c,
-                                                            timeline__Title_Field__c,timeline__LWC_Ui_Api_Not_Supported__c,timeline__Data_Provider_Type__c,
-                                                            timeline__Provider_Apex_Classname__c,timeline__Reference_Field_Name__c,timeline__Where_Clause__c,
-                                                            timeline__Overdue_Field__c,timeline__Include_All_Records__c, timeline__Sub_Title_Fields__c
-                                                    FROM timeline__Timeline_Child_Object__c
+        Timeline_Child_Object__c childConfig = 
+                                                    [SELECT Date_Field__c,Fields_to_Display__c,Icon_Image_Url__c,
+                                                            Icon_Name__c,Id,Name,Object_Color__c,Object__c,Relationship_Name__c,
+                                                            Title_Field__c,LWC_Ui_Api_Not_Supported__c,Data_Provider_Type__c,
+                                                            Provider_Apex_Classname__c,Reference_Field_Name__c,Where_Clause__c,
+                                                            Overdue_Field__c,Include_All_Records__c, Sub_Title_Fields__c
+                                                    FROM Timeline_Child_Object__c
                                                     where Id=:childConfigId];
         String soql = TimelineSOQLUtils.getSoqlForChildConfig(childConfig, recordId, null,true,new List<String>());                                            
         DiagnosticResponse response = new DiagnosticResponse();

@@ -43,13 +43,13 @@ global class SampleApexDataProvider extends AbstractTimelineDataProvider {
 
  
 
-    global override List<timeline.TimelineFieldType> getFieldsToDisplayWithTypes(){
+    global override List<TimelineFieldType> getFieldsToDisplayWithTypes(){
 
-        List<timeline.TimelineFieldType> fieldTypes= new List<timeline.TimelineFieldType>();
+        List<TimelineFieldType> fieldTypes= new List<TimelineFieldType>();
 
-        fieldTypes.add(timeline.TimelineFieldType.newInstance('Subject','Subject',Schema.DisplayType.String));
+        fieldTypes.add(TimelineFieldType.newInstance('Subject','Subject',Schema.DisplayType.String));
 
-        fieldTypes.add(timeline.TimelineFieldType.newInstance('Created Date','CreatedDate',Schema.DisplayType.String));
+        fieldTypes.add(TimelineFieldType.newInstance('Created Date','CreatedDate',Schema.DisplayType.String));
 
         return fieldTypes;
 

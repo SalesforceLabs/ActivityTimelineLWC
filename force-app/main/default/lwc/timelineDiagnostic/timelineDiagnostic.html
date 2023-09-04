@@ -9,12 +9,12 @@
                 <template if:true={hasChildConfigurations}>
                     <lightning-accordion>
                         <template for:each={childConfigurations} for:item="childConfig">
-                            <lightning-accordion-section key={childConfig.Id} name={childConfig.timeline__Object__c}
-                                label={childConfig.timeline__Object__c}>
+                            <lightning-accordion-section key={childConfig.Id} name={childConfig.Object__c}
+                                label={childConfig.Object__c}>
                                 <c-diagnostic-test-item record-id={recordId} child-config-id={childConfig.Id}
-                                    title-field={childConfig.timeline__Title_Field__c}
-                                    date-field={childConfig.timeline__Date_Field__c}
-                                    fields-to-display={childConfig.timeline__Fields_to_Display__c}>
+                                    title-field={childConfig.Title_Field__c}
+                                    date-field={childConfig.Date_Field__c}
+                                    fields-to-display={childConfig.Fields_to_Display__c}>
                                 </c-diagnostic-test-item>
                                 
                                 

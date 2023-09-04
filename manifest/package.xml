@@ -33,8 +33,8 @@
         <name>StaticResource</name>
     </types>
     <types>
-        <members>timeline__Timeline_Configuration__c</members>
-        <members>timeline__Timeline_Child_Object__c</members>
+        <members>Timeline_Configuration__c</members>
+        <members>Timeline_Child_Object__c</members>
         <name>CustomObject</name>
     </types>
     <types>
@@ -58,5 +58,5 @@
         <members>*</members>
         <name>LightningMessageChannel</name>
     </types>
-    <version>47.0</version>
+    <version>55.0</version>
 </Package>
