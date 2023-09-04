@@ -8,3 +8,5 @@ LWC implementation of https://lightningdesignsystem.com/components/activity-time
 - Can pull in all related/child objects of a parent object beyond Tasks and Events
 - Configured through a custom object configuration 
 - Can have multiple configurations for the same object that can be used in different app pages or by critieria
+- Ability to use an Apex dataprovider for retrieving related object data
+- Integrated quick action support for Log a Call, New Task and New Event
