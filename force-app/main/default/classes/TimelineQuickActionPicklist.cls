@@ -1,9 +1,12 @@
-global class TimelineQuickActionPicklist extends VisualEditor.DynamicPickList{
+/**
+ * @description		This implementation of the DynamicPicklist class returns all Create quick actions
+ */
+global class TimelineQuickActionPicklist extends VisualEditor.DynamicPickList {
     
-    VisualEditor.DesignTimePageContext context;
+    VisualEditor.DynamicPickListRows values;
 
     global TimelineQuickActionPicklist(VisualEditor.DesignTimePageContext context) {
-       this.context = context;
+        this.values = TimelineQuickActionPicklistUtil.getValues(context.entityName, 'Create');
     }
 
     global override VisualEditor.DataRow getDefaultValue() {
@@ -11,26 +14,11 @@ global class TimelineQuickActionPicklist extends VisualEditor.DynamicPickList{
     }
 
     global override VisualEditor.DynamicPickListRows getValues() {
-        VisualEditor.DynamicPickListRows values = new VisualEditor.DynamicPickListRows();
-        List<QuickAction.DescribeAvailableQuickActionResult> resultList = QuickAction.DescribeAvailableQuickActions(context.entityName);  
-        for (QuickAction.DescribeAvailableQuickActionResult result : resultList) {
-            system.debug(result);
-            if (result.getType() == 'Create' || result.getType() == 'LogACall') {
-                String name = result.getName();
-                String label = result.getLabel();
-                if (!result.getName().startsWith(context.entityName)) {
-                    // global action, add global prefix
-                    name = 'Global.'+name;
-                } else {
-                    // object specific, add prefix to label
-                    label = context.entityName + ' - ' + label;
-                }
-                //system.debug(name);
-                //system.debug(label);
-                values.addRow(new VisualEditor.DataRow(label, name));
-            }
-        }
-        return values;
+        return this.values;
     }
 
+    global override boolean isValid(Object attr) {
+        return true;
+    }
+    
 }

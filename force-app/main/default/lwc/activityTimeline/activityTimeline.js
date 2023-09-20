@@ -36,6 +36,7 @@ export default class ActivityTimeline extends LightningElement {
     @api newTaskAction;
     @api newEventAction;
     @api newCallAction;
+    @api sendEmailAction;
     @api additionalMargin;
     @api availableObjects;
     @api initialObjectSelection;
@@ -459,7 +460,7 @@ export default class ActivityTimeline extends LightningElement {
     }
 
     get showActions() {
-        if ((this.newCallAction != null || this.newTaskAction != null || this.newEventAction != null)) {
+        if ((this.newCallAction != null || this.newTaskAction != null || this.newEventAction != null || this.sendEmailAction != null)) {
             return true;
         }
         return false;

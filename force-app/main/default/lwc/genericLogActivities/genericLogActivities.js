@@ -6,6 +6,7 @@ export default class GenericLogActivities extends NavigationMixin (LightningElem
     @api newTaskAction;
     @api newEventAction;
     @api newCallAction;
+    @api sendEmailAction;
     @api objectName;
     
     handleCall(event) {
@@ -39,6 +40,19 @@ export default class GenericLogActivities extends NavigationMixin (LightningElem
             type: "standard__quickAction",
             attributes: {
                 apiName: this.newEventAction
+            },
+            state: {
+                objectApiName: this.objectName,
+                recordId: this.recordId
+            }
+        });
+    }
+
+    handleEmail(event) {
+        this[NavigationMixin.Navigate]({
+            type: "standard__quickAction",
+            attributes: {
+                apiName: this.sendEmailAction
             },
             state: {
                 objectApiName: this.objectName,

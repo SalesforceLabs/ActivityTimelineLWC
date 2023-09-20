@@ -21,5 +21,12 @@
                 </div>
             </lightning-button-group>
         </template>
+        <template if:true={sendEmailAction}>
+            <lightning-button-group>
+                <div onclick={handleEmail} class="iconButton">
+                    <lightning-icon title="Send Email" icon-name="standard:email" size="small" class="slds-icon-standard-meeting slds-icon_container slds-var-m-top_xxx-small slds-var-m-bottom_xxx-small"></lightning-icon>
+                </div>
+            </lightning-button-group>
+        </template>
     </div>
 </template>
