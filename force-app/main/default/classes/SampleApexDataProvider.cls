@@ -3,281 +3,153 @@
  *  All rights reserved.
  *  SPDX-License-Identifier: BSD-3-Clause
  *  For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
+ *  @description    This sample apex dataprovider returns the tasks related to an account
  */
+@SuppressWarnings('PMD.AvoidGlobalModifier')
+global with sharing class SampleApexDataProvider extends AbstractTimelineDataProvider {
 
-global class SampleApexDataProvider extends AbstractTimelineDataProvider {
-
-
-
-    global override String getObjectName(){
-
+    /**
+     * @description The child object name
+     * @return  String
+     */
+    global override String getObjectName() {
         return 'Task';
-
     }
 
-    global override String getRelationshipName(){
-
+    /**
+     * @description The label of the relationshipname of the child object
+     * @return  String
+     */
+    global override String getRelationshipName() {
         return 'OpenTasks';
-
     }
 
- 
-
-    global override String getTitleField(){
-
+    /**
+     * @description The field that is used as the title (flow step: Title field)
+     * @return  String
+     */
+    global override String getTitleField() {
         return 'Subject';
-
     }
 
-    global override String getDateField(){
-
-        return 'CreatedDate';
-
+    /**
+     * @description The field that is used as reference date (flow step: Date field)
+     * @return  String
+     */
+    global override String getDateField() {
+        return 'ActivityDate';
     }
 
-    global override List<String> getFieldsToDisplay(){
-
-        return new List<String>{'Subject','CreatedDate'};
-
+    /**
+     * @description The fields that are showed when expanded (flow step: Display fields)
+     * @return  List<String>
+     */
+    global override List<String> getFieldsToDisplay() {
+        return new List<String>{'Subject', 'CreatedDate', 'ActivityDate', 'IsClosed'};
     }
 
- 
-
-    global override List<TimelineFieldType> getFieldsToDisplayWithTypes(){
-
+    /**
+     * @description Defines the label and the type of the fields to display
+     *              Only needed when it's no salesforce object
+     * @return  List<TimelineFieldType>
+     */
+    global override List<TimelineFieldType> getFieldsToDisplayWithTypes() {
         List<TimelineFieldType> fieldTypes= new List<TimelineFieldType>();
-
-        fieldTypes.add(TimelineFieldType.newInstance('Subject','Subject',Schema.DisplayType.String));
-
-        fieldTypes.add(TimelineFieldType.newInstance('Created Date','CreatedDate',Schema.DisplayType.String));
-
-        return fieldTypes;
-
-    }
-
-    global override String getBaseUrlForRecordDetail(){
-
-        return '';
-
-    }
-
- 
-
-    global override String getRecordIdentifierField(){
-
-        return 'Id';
-
-    }
-
- 
-
-    global override List<Object> getData(Id recordId,String dateFilter){
-
-        List<Object> result = new List<Object>();
-
-        //Id recordtypeId = '';
-
-        String fields = 'Subject, CreatedDate';
-
-        for ( Task item:[select Id,Subject, CreatedDate,OwnerId,ActivityDate,Description,IsClosed,WhoId,Owner.Name,Who.Name from task where whatId=:recordId ]) {
-
-            Map<String,Object> obj = new Map<String,Object>();
-
-            obj.put('Id',item.Id);
-
-            obj.put('Subject',item.Subject);
-           
-
-            obj.put('CreatedDate',item.CreatedDate.format());
-            obj.put('ActivityDate',item.ActivityDate);
-            obj.put('IsClosed',item.IsClosed);
-            obj.put('WhoId',item.WhoId);
-            Map<String,String> nameMap = new Map<String,String>();
-            nameMap.put('Name',item.Owner.Name);
-            obj.put('Owner',nameMap);
-             nameMap = new Map<String,String>();
-            nameMap.put('Name',item.Who.Name);
-            obj.put('Who',nameMap);
-
-            result.add(obj);
-        }
-
-        return result;
-
-    }
-
- 
-
-    global override Boolean isSalesforceObject(){
-
-        return true;
-
-    }
-
- 
-
-    global override Boolean isUiApiNotSupported(){
-
-        return true;
-
-    }
-    
-   /* global override String getObjectName(){
-        return 'Case';
-    }
-    global override String getRelationshipName(){
-        return 'OpenCases';
-    }
-
-    global override String getTitleField(){
-        return 'Subject';
-    }
-    global override String getDateField(){
-        return 'CreatedDate';
-    }
-    global override List<String> getFieldsToDisplay(){
-        return new List<String>{'Subject','CreatedDate','CreatedById','OwnerId','Status','ClosedDate'};
-    }
-
-    global override List<timeline.TimelineFieldType> getFieldsToDisplayWithTypes(){
-        List<timeline.TimelineFieldType> fieldTypes= new List<timeline.TimelineFieldType>();
-        fieldTypes.add(timeline.TimelineFieldType.newInstance('Subject','Subject',Schema.DisplayType.String));
-        fieldTypes.add(timeline.TimelineFieldType.newInstance('Created Date','CreatedDate',Schema.DisplayType.String));
-        fieldTypes.add(timeline.TimelineFieldType.newInstance('Created By','CreatedById',Schema.DisplayType.String));
-        fieldTypes.add(timeline.TimelineFieldType.newInstance('Owner','OwnerId',Schema.DisplayType.String));
-        fieldTypes.add(timeline.TimelineFieldType.newInstance('Status','Status',Schema.DisplayType.String));
-        fieldTypes.add(timeline.TimelineFieldType.newInstance('Date/Time Closed','ClosedDate',Schema.DisplayType.String));
+        /*fieldTypes.add(TimelineFieldType.newInstance('Subject', 'Subject', Schema.DisplayType.STRING));
+        fieldTypes.add(TimelineFieldType.newInstance('Created Date', 'CreatedDate', Schema.DisplayType.STRING));
+        fieldTypes.add(TimelineFieldType.newInstance('Activity Date', 'ActivityDate', Schema.DisplayType.STRING));
+        fieldTypes.add(TimelineFieldType.newInstance('Is Closed', 'IsClosed', Schema.DisplayType.BOOLEAN));*/
         return fieldTypes;
     }
-    global override String getBaseUrlForRecordDetail(){
+
+    /**
+     * @description To put in another base url than the current salesforce instance
+     * @return  String
+     */
+    global override String getBaseUrlForRecordDetail() {
         return '';
     }
 
-    global override String getRecordIdentifierField(){
+    /**
+     * @description The field that represents the record Id
+     * @return  String
+     */
+    global override String getRecordIdentifierField() {
         return 'Id';
     }
 
-    global override List<Object> getData(Id recordId,String dateFilter){
+    /**
+     * @description This method returns the set of data
+     * @param   recordId    The id of the parent record (in this case an Account Id)
+     * @param   dateFilter  The dateFilter coming from the filters in the panel
+     * @return  List<Object>
+     */
+    @SuppressWarnings('PMD.ApexSOQLInjection')
+    global override List<Object> getData(Id recordId, String dateFilter) {
         List<Object> result = new List<Object>();
-        //Id recordtypeId = '';
-        String fields = 'Subject, CreatedById, Owner.Name, Status, ClosedDate, CreatedDate';
-        for ( Case item:[select Id,Subject, CreatedBy.Name, Owner.Name, Status, ClosedDate, CreatedDate from Case where AccountId=:recordId and Status !='Closed' ]) {
-            Map<String,Object> obj = new Map<String,Object>();
-            obj.put('Id',item.Id);
-            obj.put('Subject',item.Subject);
-            obj.put('CreatedDate',item.CreatedDate.format());
-            obj.put('CreatedById',item.CreatedBy.Name);
-            obj.put('OwnerId',item.Owner.Name);
-            obj.put('Status',item.Status);
-            if ( item.ClosedDate !=null ) {
-                obj.put('ClosedDate',item.ClosedDate.format());
-            } else {
-                obj.put('ClosedDate','');
+        if (Schema.sObjectType.Task.isAccessible()) {
+            String dateFilterStr;
+            if(dateFilter != null) {
+                switch on dateFilter {
+                    when 'last_7_days' {
+                        dateFilterStr = 'LAST_N_DAYS:7';
+                    }
+                    when 'last_30_days' { 
+                        dateFilterStr = 'LAST_N_DAYS:30';
+                    }
+                    when 'next_7_days' {
+                        dateFilterStr = 'NEXT_N_DAYS:7';
+                    }
+                }
             }
-            result.add(obj);
+            // build query
+            String query = 'Select Id, Subject, CreatedDate, ActivityDate, IsClosed ,OwnerId, Owner.Name, WhoId, Who.Name';
+            query += ' From Task';
+            // specify which lookup field to use
+            query += ' Where WhatId = \''+String.escapeSingleQuotes(recordId)+'\'';
+            if (dateFilterStr != null) {
+                query +=' And ActivityDate = '+dateFilterStr;
+            }
+            query += ' WITH USER_MODE';
+            query += ' Order By ' + this.getDateField() + ' Desc';
+            for (Task item : Database.query(query)) {
+                // return every record as a map
+                Map<String,Object> obj = new Map<String,Object>();
+                obj.put('Id', item.Id);
+                obj.put('Subject', item.Subject);
+                obj.put('CreatedDate', item.CreatedDate);
+                obj.put('ActivityDate', item.ActivityDate);
+                obj.put('IsClosed', item.IsClosed);
+                // for activities, lookup and master detail fields need to be added as follows for showing
+                // 'This user' had a task with 'This contact' 
+                Map<String, String> ownerNameMap = new Map<String,String>();
+                ownerNameMap.put('Name', item.Owner.Name);
+                obj.put('OwnerId', item.OwnerId);
+                obj.put('Owner', ownerNameMap);
+                Map<String, String> whoNameMap = new Map<String,String>();
+                whoNameMap.put('Name', item.Who.Name);
+                obj.put('WhoId', item.WhoId);
+                obj.put('Who', whoNameMap);
+                result.add(obj);
+            }
         }
         return result;
     }
 
-    global override Boolean isSalesforceObject(){
+    /**
+     * @description Returns if the child object is a salesforce object
+     * @return  Boolean
+     */
+    global override Boolean isSalesforceObject() {
         return true;
     }
 
-    global override Boolean isUiApiNotSupported(){
-        return false;
-    }
-    */  
-
-    /*
-    
-    global override String getObjectName(){
-
-        return 'RichTextApex';
-
-    }
-
-    global override String getRelationshipName(){
-
-        return 'RichTextApex';
-
-    }
-
- 
-
-    global override String getTitleField(){
-
-        return 'Subject';
-
-    }
-
-    global override String getDateField(){
-
-        return 'CreatedDate';
-
-    }
-
-    global override List<String> getFieldsToDisplay(){
-
-        return new List<String>{'Subject','CreatedDate','Description'};
-
-    }
-
- 
-
-    global override List<timeline.TimelineFieldType> getFieldsToDisplayWithTypes(){
-
-        List<timeline.TimelineFieldType> fieldTypes= new List<timeline.TimelineFieldType>();
-
-        fieldTypes.add(timeline.TimelineFieldType.newInstance('Subject','Subject',Schema.DisplayType.String));
-
-        fieldTypes.add(timeline.TimelineFieldType.newInstance('Created Date','CreatedDate',Schema.DisplayType.String));
-        fieldTypes.add(timeline.TimelineFieldType.newInstance('Description','Description','RICHTEXTAREA'));
-
-        return fieldTypes;
-
-    }
-
-    global override String getBaseUrlForRecordDetail(){
-
-        return '';
-
-    }
-
- 
-
-    global override String getRecordIdentifierField(){
-
-        return 'Id';
-
-    }
-
- 
-
-    global override List<Object> getData(Id recordId,String dateFilter){
-
-        List<Object> result = new List<Object>();
-        Map<String,Object> obj = new Map<String,Object>();
-        obj.put('Subject','Something');
-        obj.put('Description','<p><b>BOld</b></p>');
-        obj.put('CreatedDate',System.now());
-        result.add(obj);
-        return result;
-
-    }
-
- 
-
-    global override Boolean isSalesforceObject(){
-
-        return false;
-
-    }
-
- 
-
-    global override Boolean isUiApiNotSupported(){
-
+    /**
+     * @description Returns if UI api is not supported (like with Task)
+     * @return  String
+     */
+    global override Boolean isUiApiNotSupported() {
         return true;
-
-    }*/
+    }
+   
 }
