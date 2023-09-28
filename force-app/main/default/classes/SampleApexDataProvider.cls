@@ -108,7 +108,7 @@ global with sharing class SampleApexDataProvider extends AbstractTimelineDataPro
             // specify which lookup field to use
             query += ' Where WhatId = \''+String.escapeSingleQuotes(recordId)+'\'';
             if (dateFilterStr != null) {
-                query +=' And ' + this.getDateField() + ' = '+dateFilterStr;
+                query += ' And ' + this.getDateField() + ' = '+dateFilterStr;
             }
             query += ' WITH USER_MODE';
             query += ' Order By ' + this.getDateField() + ' Desc';
