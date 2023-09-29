@@ -160,7 +160,9 @@ export default class TimelineItemOtherObject extends LightningElement {
                 fldData.fieldValue =  moment(fldData.fieldValue).format();
             }
  
-            if(fldData.dataType.toUpperCase() === "RICHTEXTAREA".toUpperCase() || fldData.dataType.toUpperCase() === "TEXTAREA".toUpperCase()){
+            if(fldData.dataType.toUpperCase() === "RICHTEXTAREA".toUpperCase() || 
+                fldData.dataType.toUpperCase() === "TEXTAREA".toUpperCase() || 
+                fldData.dataType.toUpperCase() === "PLAINTEXTAREA".toUpperCase()) {
                 fldData.isRichText=true;
             }
              

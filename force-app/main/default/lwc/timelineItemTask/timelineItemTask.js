@@ -306,8 +306,15 @@ export default class TimelineItemTask extends NavigationMixin(LightningElement) 
             }
             fldData.isBoolean = fld.dataType.toUpperCase() === "Boolean".toUpperCase();
             fldData.isBooleanTrue = fldData.fieldValue;
+            
             if(fldData.dataType.toUpperCase() === "Date".toUpperCase() || fldData.dataType.toUpperCase() === "DateTime".toUpperCase()){
                 fldData.fieldValue =  moment(fldData.fieldValue).format("dddd, MMMM Do YYYY, h:mm:ss a");
+            }
+
+            if(fldData.dataType.toUpperCase() === "RICHTEXTAREA".toUpperCase() || 
+                fldData.dataType.toUpperCase() === "TEXTAREA".toUpperCase() || 
+                fldData.dataType.toUpperCase() === "PLAINTEXTAREA".toUpperCase()) {
+                fldData.isRichText=true;
             }
             
             fieldData.push(fldData);

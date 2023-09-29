@@ -7,7 +7,7 @@
                     <div class="slds-form-element__static">
                         <template if:false={theField.isHyperLink}>
                             <template if:true={theField.isRichText}>
-                                <lightning-formatted-rich-text value={theField.fieldValue}></lightning-formatted-rich-text>
+                                <lightning-formatted-rich-text value={theField.fieldValue} style="white-space: pre-line"></lightning-formatted-rich-text>
                             </template>
                             <template if:false={theField.isRichText}>
                                 {theField.fieldValue}
@@ -17,8 +17,6 @@
                             <c-linked-output-text record-id={theField.hyperLinkToId} object={theField.object} label={theField.fieldValue} is-header="false">
                             </c-linked-output-text>
                         </template>
-                       
-
                     </div>
                 </template>
                 <template if:true={theField.isBoolean}>
@@ -31,7 +29,6 @@
                             <lightning-input type="checkbox" name={theField.fieldLabel}
                                 disabled></lightning-input>
                         </template>
-
                     </div>
                 </template>
             </div>
