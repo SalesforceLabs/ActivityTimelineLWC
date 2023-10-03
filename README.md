@@ -2,6 +2,11 @@
 
 LWC implementation of https://lightningdesignsystem.com/components/activity-timeline/#site-main-content
 
+### Org prerequisites
+
+- Enable "Mobile App QuickStart"
+- Enable "Lightning Notes"
+
 ### Key features
 
 - Activity timeline for any object
