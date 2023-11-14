@@ -83,10 +83,11 @@
                             record-id={theRecord.recordId} description={theRecord.description}
                             who-to-name={theRecord.whoToName} owner-id={theRecord.OwnerId}
                             assigned-to-name={theRecord.assignedToName} who-id={theRecord.WhoId}
-                            task-subtype={theRecord.TaskSubtype}
+                            task-subtype={theRecord.TaskSubtype} task-closed-status={taskClosedStatus}
                             expanded-fields-to-display={theRecord.expandedFieldsToDisplay}
                             is-overdue={theRecord.IsOverdue} is-closed={theRecord.IsClosed}
-                            display-relative-dates={theRecord.displayRelativeDates}>
+                            display-relative-dates={theRecord.displayRelativeDates}
+                            onrefresh={handleRefresh}>
 
                         </c-timeline-item-task>
                     </template>

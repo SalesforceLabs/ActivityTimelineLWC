@@ -147,6 +147,22 @@ global class TaskUtils {
         return tsk;
     }
 
+    @AuraEnabled(cacheable=false)
+    public static Task updateTask(Task tsk){
+        update tsk;
+        return tsk;
+    }
+
+    @AuraEnabled(cacheable=true)
+    public static String getTaskClosedStatus() {
+        List<TaskStatus> closedStatusList = [SELECT MasterLabel, IsClosed FROM TaskStatus WHERE IsClosed = true];
+        // only return the result if there is 1, because more than 1 closed statusses cannot be handled easy
+        if (closedStatusList.size() == 1) {
+            return closedStatusList[0].MasterLabel;
+        }
+        return null;
+    }
+
 
     @AuraEnabled(cacheable=false)
     public static Event saveEvent(String subject, Datetime startDate,Datetime endDate,String whatId, String whoId, Boolean allDayEvent, String location){
