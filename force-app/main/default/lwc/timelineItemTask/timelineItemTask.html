@@ -23,6 +23,9 @@
                     <div class="slds-grid slds-grid_align-spread slds-timeline__trigger">
                         <div class="slds-grid slds-grid_vertical-align-center slds-truncate_container_75 slds-no-space">
                             <h3 class="slds-truncate" title={title}>
+                                <template if:true={canBeClosed}>
+                                    <lightning-input type="checkbox" style="float: left;top: -2px;width:25px" data-id="checkbox" onchange={handleClose}></lightning-input>
+                                </template>
                                 <a onclick={navigateToTask}>
                                     <template if:true={hasSubject}>
                                         <strong>{title}</strong>
