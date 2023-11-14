@@ -105,6 +105,14 @@
         <value>Invalid parameters</value>
     </labels>
     <labels>
+        <fullName>Is_Closed</fullName>
+        <categories>Activity Timeline</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Is Closed</shortDescription>
+        <value>is closed</value>
+    </labels>
+    <labels>
         <fullName>Last_30_days</fullName>
         <categories>Activity Timeline</categories>
         <language>en_US</language>

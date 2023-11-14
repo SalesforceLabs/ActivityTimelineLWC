@@ -26,6 +26,7 @@ import LOCALE from '@salesforce/i18n/locale';
 
 import { publish, MessageContext } from 'lightning/messageService';
 import timelineItemState from '@salesforce/messageChannel/TimelineItemState__c';
+import getTaskClosedStatus from '@salesforce/apex/TaskUtils.getTaskClosedStatus';
 
 export default class ActivityTimeline extends LightningElement {
     @api recordId;
@@ -33,6 +34,7 @@ export default class ActivityTimeline extends LightningElement {
     @api headerTitle;
     @api headerIcon;
     @api showHeader = false;
+    // showButtons represents close task enablement
     @api showButtons = false;
     @api newTaskAction;
     @api newEventAction;
@@ -57,6 +59,7 @@ export default class ActivityTimeline extends LightningElement {
     @track searchText;
     @api noDataFoundWarnCss;
     @api objectName;
+    @api taskClosedStatus;
 
     @wire(MessageContext)
     messageContext;
@@ -70,8 +73,14 @@ export default class ActivityTimeline extends LightningElement {
         Either_recordId_or_configId_are_empty,
         Search
     }
+
     connectedCallback() {
-        
+        if (this.showButtons) {
+            getTaskClosedStatus()
+                    .then(data => {
+                        this.taskClosedStatus = data;
+                    });
+        }
         Promise.all([
             loadScript(this, MOMENT_JS),
         ]).then(() => {
@@ -149,8 +158,8 @@ export default class ActivityTimeline extends LightningElement {
                     }else{
                         if (this.objectFilters && 
                             !(
-                                this.objectFilters.includes(configs[i].timeline__Object__c) ||
-                                this.objectFilters.includes(configs[i].timeline__Relationship_Name__c)
+                                (configs[i].timeline__Data_Provider_Type__c != "Apex class" && this.objectFilters.includes(configs[i].timeline__Object__c)) ||
+                                (configs[i].timeline__Data_Provider_Type__c === "Apex class" && this.objectFilters.includes(configs[i].timeline__Relationship_Name__c))
                             )
                         ) {
                             continue;
@@ -430,7 +439,13 @@ export default class ActivityTimeline extends LightningElement {
             childRec.ActivityDate=recordData.ActivityDate;
             //Flag as overdue of the Task is not complete and the due date is past today
             childRec.IsOverdue = !childRec.IsClosed && (new Date().getTime() - Date.parse(childRec.ActivityDate)>0);
-            childRec.assignedToName = (childRec.OwnerId === CURRENT_USER_ID) ? You : recordData.Owner.Name;
+            if (childRec.OwnerId === CURRENT_USER_ID) {
+                childRec.assignedToName = You;
+            } else {
+                if (recordData.Owner) {
+                    childRec.assignedToName = recordData.Owner.Name;
+                }
+            }
             if (recordData.Who) {
                 childRec.whoToName = recordData.Who.Name;
             }
@@ -442,6 +457,8 @@ export default class ActivityTimeline extends LightningElement {
     errorLoadingData(error) {
 
         this.error = true;
+        console.log('The error:');
+        console.log(JSON.stringify(error));
         if (error.body && error.body.exceptionType && error.body.message) {
             this.errorMsg = `[ ${error.body.exceptionType} ] : ${error.body.message}`;
         } else {

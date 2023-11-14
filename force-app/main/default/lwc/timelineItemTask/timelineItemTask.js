@@ -8,9 +8,11 @@
 import { LightningElement,api,track,wire } from 'lwc';
 import { NavigationMixin } from 'lightning/navigation'
 import CURRENT_USER_ID from '@salesforce/user/Id';
+import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 
 import getEmailDetails from '@salesforce/apex/RecordTimelineDataProvider.getEmailDetails';
 import getTimelineItemChildData from '@salesforce/apex/RecordTimelineDataProvider.getTimelineItemChildData';
+import updateTask from '@salesforce/apex/TaskUtils.updateTask';
 
 import Toggle_Details from '@salesforce/label/c.Toggle_details';
 import had_a_task from '@salesforce/label/c.had_a_task';
@@ -30,6 +32,7 @@ import No_Subject from '@salesforce/label/c.No_Subject';
 import and from '@salesforce/label/c.and';
 import other from '@salesforce/label/c.other';
 import others from '@salesforce/label/c.others';
+import isClosedLabel from '@salesforce/label/c.Is_Closed';
 import {
     subscribe,
     APPLICATION_SCOPE,
@@ -61,6 +64,7 @@ export default class TimelineItemTask extends NavigationMixin(LightningElement) 
     @track firstRecipient;
     @api fieldData;
     @api displayRelativeDates;
+    @api taskClosedStatus;
 
     label = {
         Toggle_Details,
@@ -325,5 +329,33 @@ export default class TimelineItemTask extends NavigationMixin(LightningElement) 
     handleMessage(message){
         this.expanded=message.expanded;
         this.handleToggleDetail();
+    }
+
+    handleClose() {
+        let currentTask = {
+            Id : this.recordId,
+            Status : this.taskClosedStatus
+        }
+        updateTask({"tsk":currentTask}).then(data => {
+            const event = new ShowToastEvent({
+                title: this.taskClosedStatus,
+                variant: "success",
+                message: "{0} " + isClosedLabel,
+                messageData: [
+                    {
+                        url: '/'+this.recordId,
+                        label: ''+this.title?this.title:'Task',
+                    }
+                ]
+            });
+            this.dispatchEvent(event);
+            this.dispatchEvent(new CustomEvent("refresh"));
+        }).catch(error => {
+            console.log(error);
+        });
+    }
+
+    get canBeClosed() {
+        return this.taskClosedStatus != null && !this.isClosed && this.assignedToName == You;
     }
 }

@@ -71,4 +71,23 @@ public with sharing class TaskUtilsTest {
         List<Event> events = [select Id from Event where WhatId=:acct.Id];
         System.assertEquals(1,events.size(),'Incorrect number of events returned');
     }
+
+    @IsTest
+    static void testGetClosedTaskStatus(){
+        String closedStatus = TaskUtils.getTaskClosedStatus();
+        // will only return a value when there is one status, which is the case in the Timeline develop org
+        System.assertEquals('Completed', closedStatus, 'More then 1 closed status found, comment this assert and uncomment the next');
+        //System.assertEquals(null, closedStatus, 'Only 1 closed status found, comment this assert and uncomment the previous');
+    }
+
+    @IsTest
+    static void testUpdateTask(){
+        Task acctTask = [Select Id From Task Limit 1];
+        String closedStatus = TaskUtils.getTaskClosedStatus();
+        acctTask.Status = closedStatus;
+        TaskUtils.updateTask(acctTask);
+        acctTask = [Select Id, Status From Task Limit 1];
+        System.assertEquals('Completed', acctTask.Status, 'Task not updated to be completed');
+    }
+
 }

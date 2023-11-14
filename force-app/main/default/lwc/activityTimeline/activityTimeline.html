@@ -61,8 +61,8 @@
                             </div>
                         </template>
                         <template for:each={timelineItemsByMonth} for:item="theMonth">
-                            <c-timeline-month key={theMonth.monthValue} month={theMonth.monthValue}
-                                month-as-duration={theMonth.timeFromNow} timeline-items={theMonth.timelineItems}>
+                            <c-timeline-month key={theMonth.monthValue} month={theMonth.monthValue} task-closed-status={taskClosedStatus}
+                                month-as-duration={theMonth.timeFromNow} timeline-items={theMonth.timelineItems} onrefresh={refreshData}>
                             </c-timeline-month>
                         </template>
                     </template>

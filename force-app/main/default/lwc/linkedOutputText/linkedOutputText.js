@@ -16,15 +16,30 @@ export default class LinkedOutputText extends NavigationMixin(LightningElement) 
             return;
         }else{
             if(!this.isExternalServiceData){
-            // View a custom object record.
-                this[NavigationMixin.Navigate]({
-                    type: 'standard__recordPage',
-                    attributes: {
-                        recordId: this.recordId,
-                        objectApiName: this.object,
-                        actionName: 'view'
-                    }
-                });
+                // View a custom object record.
+                if (this.object == 'AttachedContentNote') {
+                    console.log(this.recordId);
+                    // url for attached content note is different then other objects
+                    this[NavigationMixin.Navigate]({
+                        type: "standard__objectPage",
+                        attributes: {
+                          objectApiName: "ContentNote",
+                          actionName: "home",
+                        },
+                        state: {
+                          recordId: this.recordId
+                        }
+                    });
+                } else {
+                    this[NavigationMixin.Navigate]({
+                        type: 'standard__recordPage',
+                        attributes: {
+                            recordId: this.recordId,
+                            objectApiName: this.object,
+                            actionName: 'view'
+                        }
+                    });
+                }
             }else{
                 window.open(`${this.baseUrlForRecordDetail}/${this.recordId}`,'_blank');
             }

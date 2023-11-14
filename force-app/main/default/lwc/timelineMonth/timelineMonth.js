@@ -13,6 +13,7 @@ export default class TimelineMonth extends LightningElement {
     @api monthAsDuration;
     @api timelineItems;
     @api displayRelativeDates;
+    @api taskClosedStatus;
     @track expanded=true;
 
     toggleExpanded(){
@@ -24,6 +25,10 @@ export default class TimelineMonth extends LightningElement {
     }
     get sectionCssClass(){
         return this.expanded?"slds-section slds-is-open":"slds-section";
+    }
+
+    handleRefresh() {
+        this.dispatchEvent(new CustomEvent("refresh"));
     }
 
 }
