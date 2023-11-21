@@ -16,12 +16,15 @@ public class TimelineQuickActionPicklistUtil {
             if (result.getType() == actionType) {
                 String name = result.getName();
                 String label = result.getLabel();
-                if (!result.getName().startsWith(entityName)) {
-                    // global action, add global prefix
-                    name = 'Global.'+name;
-                } else {
-                    // object specific, add prefix to label
-                    label = entityName + ' - ' + label;
+                if (entityName != null) {
+                    // entityName can become null in community context when selecting a value
+                    if (!result.getName().startsWith(entityName)) {
+                        // global action, add global prefix
+                        name = 'Global.'+name;
+                    } else {
+                        // object specific, add prefix to label
+                        label = entityName + ' - ' + label;
+                    }
                 }
                 values.addRow(new VisualEditor.DataRow(label, name));
             }
