@@ -86,9 +86,8 @@
                             task-subtype={theRecord.TaskSubtype} task-closed-status={taskClosedStatus}
                             expanded-fields-to-display={theRecord.expandedFieldsToDisplay}
                             is-overdue={theRecord.IsOverdue} is-closed={theRecord.IsClosed}
-                            display-relative-dates={theRecord.displayRelativeDates}
-                            onrefresh={handleRefresh}>
-
+                            display-relative-dates={theRecord.displayRelativeDates} 
+                            theme-info={theRecord.themeInfo} onrefresh={handleRefresh}>
                         </c-timeline-item-task>
                     </template>
 
