@@ -274,7 +274,7 @@ export default class TimelineItemTask extends NavigationMixin(LightningElement) 
             getTimelineItemChildData({
                 objectApiName: 'Task',
                 fieldsToExtract: this.expandedFieldsToDisplay,
-                recordId: (this.isEmail?this.activityId:this.recordId)
+                recordId: ((this.isEmail&&this.activityId!=null)?this.activityId:this.recordId)
             })
             .then(data => {
                 this.dataLoaded=true;
