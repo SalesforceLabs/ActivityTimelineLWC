@@ -142,6 +142,9 @@ export default class TimelineItemOtherObject extends LightningElement {
             fldData.apiName = fld.apiName;
             fldData.fieldLabel = fld.fieldLabel;
             fldData.dataType = fld.extraTypeInfo?fld.extraTypeInfo.toUpperCase():fld.dataType;
+            if (fld.dataType.toUpperCase() === "REFERENCE" && fldData.fieldLabel.endsWith(' ID')) { 
+                fldData.fieldLabel = fldData.fieldLabel.substr(0, fldData.fieldLabel.length-3);
+            }
             fldData.fieldValue = data[fld.apiName];
             if(fld.isNamePointing && data[fld.relationshipName]){
                 fldData.fieldValue=data[fld.relationshipName]['Name'];
@@ -157,7 +160,9 @@ export default class TimelineItemOtherObject extends LightningElement {
                 fldData.isBooleanTrue = fldData.fieldValue;
             }
             if(fldData.dataType.toUpperCase() === "Date".toUpperCase() || fldData.dataType.toUpperCase() === "DateTime".toUpperCase()){
-                fldData.fieldValue =  moment(fldData.fieldValue).format();
+                if (fldData.fieldValue != null) {
+                    fldData.fieldValue =  moment(fldData.fieldValue).format("dddd, MMMM Do YYYY, h:mm:ss a");
+                }
             }
  
             if(fldData.dataType.toUpperCase() === "RICHTEXTAREA".toUpperCase() || 
