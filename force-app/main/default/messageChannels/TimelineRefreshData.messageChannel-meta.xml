@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningMessageChannel xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>Allows refreshing the timeline data from an external event</description>
+    <isExposed>true</isExposed>
+    <lightningMessageFields>
+        <description>If populated, the timeline will refresh only if it matches this record id</description>
+        <fieldName>recordId</fieldName>
+    </lightningMessageFields>
+    <lightningMessageFields>
+        <description>If populated, the timeline will refresh only if it matches this config id</description>
+        <fieldName>configId</fieldName>
+    </lightningMessageFields>
+    <masterLabel>Timeline Refresh Data</masterLabel>
+</LightningMessageChannel>
