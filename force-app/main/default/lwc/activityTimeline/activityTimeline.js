@@ -121,7 +121,7 @@ export default class ActivityTimeline extends LightningElement {
 
     processTimelineData(data) {
         moment.locale(LOCALE);
-        moment.lang(LANG);
+        //moment.lang(LANG);
         try {
 
             this.isLoading = false;
