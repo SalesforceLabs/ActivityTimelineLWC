@@ -24,8 +24,9 @@ import Search from '@salesforce/label/c.Search';
 import LANG from '@salesforce/i18n/lang';
 import LOCALE from '@salesforce/i18n/locale';
 
-import { publish, MessageContext } from 'lightning/messageService';
+import { subscribe, unsubscribe, publish, MessageContext } from 'lightning/messageService';
 import timelineItemState from '@salesforce/messageChannel/TimelineItemState__c';
+import timelineRefreshData from '@salesforce/messageChannel/TimelineRefreshData__c';
 import getTaskClosedStatus from '@salesforce/apex/TaskUtils.getTaskClosedStatus';
 
 export default class ActivityTimeline extends LightningElement {
@@ -105,6 +106,22 @@ export default class ActivityTimeline extends LightningElement {
                     }),
                 );
             });
+
+        // refresh data if a message channel event is fired from outside the managed package
+        this.timelineRefreshDataSubscription = subscribe(
+            this.messageContext,
+            timelineRefreshData,
+            ({ recordId, configId }) => {
+                // refresh data only if the relevant timeline component has been requested to be refreshed, and not the rest of the tabs
+                if((!recordId || recordId == this.recordId) && (!configId || configId == this.configId)) {
+                    this.refreshData();
+                }
+            }
+        );
+    }
+
+    disconnectedCallback() {
+        unsubscribe(this.timelineRefreshDataSubscription);
     }
 
     refreshData() {
