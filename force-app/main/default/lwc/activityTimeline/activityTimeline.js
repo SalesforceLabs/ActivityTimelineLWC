@@ -26,7 +26,8 @@ import LOCALE from '@salesforce/i18n/locale';
 
 import { subscribe, unsubscribe, publish, MessageContext } from 'lightning/messageService';
 import timelineItemState from '@salesforce/messageChannel/TimelineItemState__c';
-import timelineRefreshData from '@salesforce/messageChannel/TimelineRefreshData__c';
+// timeline refresh from external
+//import timelineRefreshData from '@salesforce/messageChannel/TimelineRefreshData__c';
 import getTaskClosedStatus from '@salesforce/apex/TaskUtils.getTaskClosedStatus';
 
 export default class ActivityTimeline extends LightningElement {
@@ -107,6 +108,7 @@ export default class ActivityTimeline extends LightningElement {
                 );
             });
 
+        /*
         // refresh data if a message channel event is fired from outside the managed package
         this.timelineRefreshDataSubscription = subscribe(
             this.messageContext,
@@ -118,11 +120,13 @@ export default class ActivityTimeline extends LightningElement {
                 }
             }
         );
+        */
     }
-
+    /*
     disconnectedCallback() {
         unsubscribe(this.timelineRefreshDataSubscription);
     }
+    */
 
     refreshData() {
         this.isLoading = true;
