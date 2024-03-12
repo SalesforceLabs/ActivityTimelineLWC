@@ -2,9 +2,12 @@ import { LightningElement, api, track, wire } from 'lwc';
 import getTimelineItemChildData from '@salesforce/apex/RecordTimelineDataProvider.getTimelineItemChildData';
 import { loadScript } from 'lightning/platformResourceLoader';
 import MOMENT_JS from '@salesforce/resourceUrl/moment_js';
+import CURRENT_USER_ID from '@salesforce/user/Id';
+import TimeZoneSidKey from '@salesforce/schema/User.TimeZoneSidKey';
 import Toggle_Details from '@salesforce/label/c.Toggle_details';
 import LANG from '@salesforce/i18n/lang';
 import LOCALE from '@salesforce/i18n/locale';
+import { getRecord, getFieldValue } from "lightning/uiRecordApi";
 import {
     subscribe,
     APPLICATION_SCOPE,
@@ -32,6 +35,7 @@ export default class TimelineItemOtherObject extends LightningElement {
     @api expanded;
     @api themeInfo;
     @api isSalesforceObject=false;
+    @api currentUserTimezone;
     @track dataLoaded = false;
  
     label = {
@@ -61,6 +65,17 @@ export default class TimelineItemOtherObject extends LightningElement {
         .catch(error => {
             console.log('TimelineItemOtherObject: MomentJS not loaded');
         });
+    }
+
+    @wire(getRecord, {recordId: CURRENT_USER_ID, fields: [TimeZoneSidKey]}) 
+    wireuser({error,data}) {
+        if (error) {
+            this.error = error; 
+        } else if (data) {
+            if (data.fields.TimeZoneSidKey.value != null) {
+                this.currentUserTimezone=data.fields.TimeZoneSidKey.value;
+            }
+        }
     }
 
     @api 
@@ -159,10 +174,16 @@ export default class TimelineItemOtherObject extends LightningElement {
             if(fldData.isBoolean){
                 fldData.isBooleanTrue = fldData.fieldValue;
             }
-            if(fldData.dataType.toUpperCase() === "Date".toUpperCase() || fldData.dataType.toUpperCase() === "DateTime".toUpperCase()){
-                if (fldData.fieldValue != null) {
+            if(fldData.dataType.toUpperCase() === "Date".toUpperCase()) {
+                fldData.isDate=true;
+            } 
+            
+            if (fldData.dataType.toUpperCase() === "DateTime".toUpperCase()){
+                /*if (fldData.fieldValue != null) {
                     fldData.fieldValue =  moment(fldData.fieldValue).format("dddd, MMMM Do YYYY, h:mm:ss a");
-                }
+                }*/
+                fldData.timezone = this.currentUserTimezone;
+                fldData.isDateTime=true;
             }
  
             if(fldData.dataType.toUpperCase() === "RICHTEXTAREA".toUpperCase() || 
