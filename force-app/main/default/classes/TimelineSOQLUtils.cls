@@ -75,8 +75,9 @@ public with sharing class TimelineSOQLUtils {
         List<String> soqlFields = new List<String>();
         for(String fldApiName: fieldsToQuery){
             ApexDescribeUtils.FieldData fldMeta = (ApexDescribeUtils.FieldData)feildMetaMap.get(fldApiName);
-            if(fldMeta != null && fldMeta.dataType == 'PICKLIST'){
+            if(fldMeta != null && fldMeta.dataType == 'PICKLIST' && !fldApiName.equals('TaskSubtype')){
                 log.add('Field: '+ fldApiName + ' is a PICKLIST. Adding toLabel()');
+                // included an exception for tasksubtype, because that one is used to define the icon
                 soqlFields.add('toLabel('+fldApiName+')');
             }else{
                 soqlFields.add(fldApiName);

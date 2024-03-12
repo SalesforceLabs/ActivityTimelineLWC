@@ -6,8 +6,10 @@
  */
 
 import { LightningElement,api,track,wire } from 'lwc';
+import { getRecord, getFieldValue } from "lightning/uiRecordApi";
 import { NavigationMixin } from 'lightning/navigation'
 import CURRENT_USER_ID from '@salesforce/user/Id';
+import TimeZoneSidKey from '@salesforce/schema/User.TimeZoneSidKey';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 
 import getEmailDetails from '@salesforce/apex/RecordTimelineDataProvider.getEmailDetails';
@@ -58,6 +60,7 @@ export default class TimelineItemTask extends NavigationMixin(LightningElement) 
     @api expandedFieldsToDisplay;
     @api isOverdue;
     @api isClosed;
+    @api currentUserTimezone;
     @track dataLoaded = false;
     @track toAddresses;
     @track ccAddresses;
@@ -100,6 +103,17 @@ export default class TimelineItemTask extends NavigationMixin(LightningElement) 
                 (message) => this.handleMessage(message),
                 { scope: APPLICATION_SCOPE }
             );
+        }
+    }
+
+    @wire(getRecord, {recordId: CURRENT_USER_ID, fields: [TimeZoneSidKey]}) 
+    wireuser({error,data}) {
+        if (error) {
+            this.error = error; 
+        } else if (data) {
+            if (data.fields.TimeZoneSidKey.value != null) {
+                this.currentUserTimezone=data.fields.TimeZoneSidKey.value;
+            }
         }
     }
 
@@ -319,10 +333,17 @@ export default class TimelineItemTask extends NavigationMixin(LightningElement) 
             fldData.isBoolean = fld.dataType.toUpperCase() === "Boolean".toUpperCase();
             fldData.isBooleanTrue = fldData.fieldValue;
             
-            if(fldData.dataType.toUpperCase() === "Date".toUpperCase() || fldData.dataType.toUpperCase() === "DateTime".toUpperCase()){
+            if(fldData.dataType.toUpperCase() === "Date".toUpperCase()){
                 if (fldData.fieldValue != null) {
-                    fldData.fieldValue =  moment(fldData.fieldValue).format("dddd, MMMM Do YYYY, h:mm:ss a");
+                    //fldData.fieldValue =  moment(fldData.fieldValue).format("dddd, MMMM Do YYYY, h:mm:ss a");
+                    
                 }
+                fldData.isDate=true;
+            }
+
+            if (fldData.dataType.toUpperCase() === "DateTime".toUpperCase()) {
+                fldData.timezone = this.currentUserTimezone;
+                fldData.isDateTime=true;
             }
 
             if(fldData.dataType.toUpperCase() === "RICHTEXTAREA".toUpperCase() || 

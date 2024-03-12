@@ -48,7 +48,7 @@ export default class TimelineNote extends LightningElement {
         Promise.all([
             loadScript(this, MOMENT_JS),
         ]).then(() => {
-            moment.lang(LANG);
+            //moment.lang(LANG);
             moment.locale(LOCALE);
 
         })

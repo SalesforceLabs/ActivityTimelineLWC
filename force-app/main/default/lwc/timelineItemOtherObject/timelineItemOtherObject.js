@@ -54,7 +54,7 @@ export default class TimelineItemOtherObject extends LightningElement {
         Promise.all([
             loadScript(this, MOMENT_JS),
         ]).then(() => {
-            moment.lang(LANG);
+            //moment.lang(LANG);
             moment.locale(LOCALE);
 
         })
@@ -169,6 +169,12 @@ export default class TimelineItemOtherObject extends LightningElement {
                 fldData.dataType.toUpperCase() === "TEXTAREA".toUpperCase() || 
                 fldData.dataType.toUpperCase() === "PLAINTEXTAREA".toUpperCase()) {
                 fldData.isRichText=true;
+            }
+
+            if (fldData.fieldValue == null) {
+                fldData.isNull = true;
+            } else {
+                fldData.isNull = false;
             }
              
             fieldData.push(fldData);

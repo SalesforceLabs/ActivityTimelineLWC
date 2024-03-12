@@ -4,13 +4,40 @@
             <span class="slds-form-element__label">{theField.fieldLabel}</span>
             <div class="slds-form-element__control">
                 <template if:false={theField.isBoolean}>
-                    <div class="slds-form-element__static">
+                    <div class="slds-form-element__static" tabindex="0">
                         <template if:false={theField.isHyperLink}>
                             <template if:true={theField.isRichText}>
                                 <lightning-formatted-rich-text value={theField.fieldValue} style="white-space: pre-line"></lightning-formatted-rich-text>
                             </template>
                             <template if:false={theField.isRichText}>
-                                {theField.fieldValue}
+                                <template if:false={theField.isNull}>
+                                    <template if:true={theField.isDate}>
+                                        <lightning-formatted-date-time
+                                            value={theField.fieldValue}
+                                            year="numeric"
+                                            day="numeric"
+                                            month="numeric"
+                                        >
+                                        </lightning-formatted-date-time>
+                                    </template>
+                                    <template if:false={theField.isDate}>
+                                        <template if:true={theField.isDateTime}>
+                                            <lightning-formatted-date-time
+                                                value={theField.fieldValue}
+                                                year="numeric"
+                                                day="numeric"
+                                                month="numeric"
+                                                hour="2-digit"
+                                                minute="2-digit"
+                                                time-zone={theField.timezone}
+                                            >
+                                            </lightning-formatted-date-time>
+                                        </template>
+                                        <template if:false={theField.isDateTime}>
+                                            {theField.fieldValue}
+                                        </template>
+                                    </template>
+                                </template>
                             </template>
                         </template>
                         <template if:true={theField.isHyperLink}>
@@ -20,7 +47,7 @@
                     </div>
                 </template>
                 <template if:true={theField.isBoolean}>
-                    <div class="slds-form-element__static">
+                    <div class="slds-form-element__static" tabindex="0">
                         <template if:true={theField.isBooleanTrue}>
                             <lightning-input type="checkbox" name={theField.fieldLabel} checked
                                 disabled></lightning-input>
