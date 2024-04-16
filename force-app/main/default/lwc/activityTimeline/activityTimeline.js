@@ -127,7 +127,7 @@ export default class ActivityTimeline extends LightningElement {
         unsubscribe(this.timelineRefreshDataSubscription);
     }
     */
-
+   
     refreshData() {
         this.isLoading = true;
         getTimelineItemData({ confIdOrName: this.configId, recordId: this.recordId, dateFilter: this.dateFilterSelection })
@@ -376,7 +376,7 @@ export default class ActivityTimeline extends LightningElement {
             if(config.timeline__Sub_Title_Fields__c){
                 let subTitleFields = config.timeline__Sub_Title_Fields__c.split(',');
                 let itemSubTitle = []; 
-                for(let i=0;i<titleFields.length;i++){
+                for(let i=0;i<subTitleFields.length;i++){
                     if(recordData[subTitleFields[i]]){
                         itemSubTitle.push(recordData[subTitleFields[i]]);
                     }
