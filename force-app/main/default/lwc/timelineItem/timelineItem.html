@@ -24,7 +24,7 @@
                                         </c-linked-output-text>
                                     </template>
                                     <template if:false={shouldNavigateToRecord}>
-                                        {title}
+                                        <lightning-formatted-rich-text value={title}></lightning-formatted-rich-text>
                                     </template>
                                     <template if:true={isOverdue}>
                                         &nbsp;<lightning-icon icon-name="utility:warning" variant="error" size="x-small" alternative-text={label.Overdue}></lightning-icon>
@@ -56,7 +56,8 @@
                         </div>
                         <template if:true={hasSubTitle}>
                             <p class="slds-var-m-horizontal_xx-small slds-truncate" title={subTitle}>
-                                <span class="slds-text-title slds-var-p-right_xx-small"><b>{subTitleLabel}</b></span>{subTitle}
+                                <span class="slds-text-title slds-var-p-right_xx-small"><b>{subTitleLabel}</b></span>
+                                <lightning-formatted-rich-text value={subTitle}></lightning-formatted-rich-text>
                             </p>    
                         </template>
                         <div if:true={expanded} class="slds-box slds-theme_shade slds-var-m-top_x-small slds-var-m-horizontal_xx-small slds-var-p-around_medium">
