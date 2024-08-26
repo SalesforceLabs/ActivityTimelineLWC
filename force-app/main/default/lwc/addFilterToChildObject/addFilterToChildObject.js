@@ -81,10 +81,11 @@ export default class AddFilterToChildObject extends LightningElement {
             let whereCondition = `${filter.field} ${filter.operator}`;
             let fieldType= filter.fieldType.toLowerCase();
             if (STRING_DATA_TYPES.includes(fieldType.toLowerCase())) {
-                whereCondition += `'${filter.filterValue}'`;
+                whereCondition += ` '${filter.filterValue}'`;
             } else {
-                whereCondition += `${filter.filterValue}`;
+                whereCondition += ` ${filter.filterValue}`;
             }
+            console.log(whereCondition);
             conditions.push(whereCondition);
         }
         if (conditions.length > 0) {
