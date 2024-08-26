@@ -81,6 +81,10 @@ export default class SelectFieldsForConfig extends LightningElement {
             }
             this.fields = fieldResults;
             this.isLoading = false;
+            if (this.childObjectApiName.endsWith('History')) {
+                console.log('History object -> does not work with uiAPI, select checkbox');
+                this.uiApiNotSupported = true;
+            }
         }
         if (error) {
             console.log(JSON.stringify(error, null, 4));

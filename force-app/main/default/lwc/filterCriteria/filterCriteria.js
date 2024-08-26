@@ -133,7 +133,7 @@ export default class FilterCriteria extends LightningElement {
         let theOptions = new Array();
         theOptions.push({ label: '=', value: '=' });
         theOptions.push({ label: '!=', value: '!=' });
-        theOptions.push({ label: 'contains', value: 'contains' });
+        theOptions.push({ label: 'contains', value: 'like' });
         theOptions.push({ label: '>', value: '>' });
         theOptions.push({ label: '>=', value: '>=' });
         theOptions.push({ label: '<', value: '<' });
