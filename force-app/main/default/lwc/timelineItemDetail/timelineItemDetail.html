@@ -35,7 +35,7 @@
                                             </lightning-formatted-date-time>
                                         </template>
                                         <template if:false={theField.isDateTime}>
-                                            {theField.fieldValue}
+                                            <lightning-formatted-rich-text value={theField.fieldValue}></lightning-formatted-rich-text>
                                         </template>
                                     </template>
                                 </template>
