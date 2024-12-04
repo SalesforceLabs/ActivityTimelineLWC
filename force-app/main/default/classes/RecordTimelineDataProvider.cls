@@ -145,7 +145,7 @@ public with sharing class RecordTimelineDataProvider {
         //get the data from the record
         String soqlStmt ='';
         if(objectApiName !='ActivityHistory'){
-            soqlStmt ='select Id,'+String.join(newFieldsToQuery,',')+' from '+objectApiName+' where Id=:recordId';
+            soqlStmt ='select Id,'+String.join(newFieldsToQuery,',')+' from '+objectApiName+' where Id=:recordId ALL ROWS';
         }else{
             soqlStmt ='select Id,'+String.join(newFieldsToQuery,',')+' from Task where Id=:recordId ALL ROWS';
 
