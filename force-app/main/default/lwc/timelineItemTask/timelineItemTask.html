@@ -65,7 +65,8 @@
                     </div>
                     <template if:true={hasSubTitle}>
                         <p class="slds-var-m-horizontal_xx-small slds-truncate" title={subTitle}>
-                            <span class="slds-text-title slds-var-p-right_xx-small"><b>{subTitleLabel}</b></span>{subTitle}
+                            <span class="slds-text-title slds-var-p-right_xx-small"><b>{subTitleLabel}</b></span>
+                            <lightning-formatted-rich-text value={subTitle}></lightning-formatted-rich-text>
                         </p>    
                     </template>
                     <p if:true={isTask} class="slds-var-m-horizontal_xx-small">

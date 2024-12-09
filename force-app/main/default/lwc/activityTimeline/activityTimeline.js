@@ -26,7 +26,8 @@ import LOCALE from '@salesforce/i18n/locale';
 
 import { subscribe, unsubscribe, publish, MessageContext } from 'lightning/messageService';
 import timelineItemState from '@salesforce/messageChannel/TimelineItemState__c';
-import timelineRefreshData from '@salesforce/messageChannel/TimelineRefreshData__c';
+// timeline refresh from external
+//import timelineRefreshData from '@salesforce/messageChannel/TimelineRefreshData__c';
 import getTaskClosedStatus from '@salesforce/apex/TaskUtils.getTaskClosedStatus';
 
 export default class ActivityTimeline extends LightningElement {
@@ -107,6 +108,7 @@ export default class ActivityTimeline extends LightningElement {
                 );
             });
 
+        /*
         // refresh data if a message channel event is fired from outside the managed package
         this.timelineRefreshDataSubscription = subscribe(
             this.messageContext,
@@ -118,12 +120,14 @@ export default class ActivityTimeline extends LightningElement {
                 }
             }
         );
+        */
     }
-
+    /*
     disconnectedCallback() {
         unsubscribe(this.timelineRefreshDataSubscription);
     }
-
+    */
+   
     refreshData() {
         this.isLoading = true;
         getTimelineItemData({ confIdOrName: this.configId, recordId: this.recordId, dateFilter: this.dateFilterSelection })
@@ -373,7 +377,7 @@ export default class ActivityTimeline extends LightningElement {
             if(config.timeline__Sub_Title_Fields__c){
                 let subTitleFields = config.timeline__Sub_Title_Fields__c.split(',');
                 let itemSubTitle = []; 
-                for(let i=0;i<titleFields.length;i++){
+                for(let i=0;i<subTitleFields.length;i++){
                     if(recordData[subTitleFields[i]]){
                         itemSubTitle.push(recordData[subTitleFields[i]]);
                     }

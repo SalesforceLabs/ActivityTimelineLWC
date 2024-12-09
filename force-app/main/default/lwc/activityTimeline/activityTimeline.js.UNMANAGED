@@ -3,6 +3,7 @@
  *  All rights reserved.
  *  SPDX-License-Identifier: BSD-3-Clause
  *  For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
+ *  WHEN USING UNMANAGED VERSION, PICK THE CONTENTS OF THE activityTimelineUnmanaged.js.bck AND PASTE INTO THIS FILE
  */
 
 import { LightningElement, track, api,wire } from 'lwc';
@@ -23,8 +24,11 @@ import Search from '@salesforce/label/c.Search';
 import LANG from '@salesforce/i18n/lang';
 import LOCALE from '@salesforce/i18n/locale';
 
-import { publish, MessageContext } from 'lightning/messageService';
+import { subscribe, unsubscribe, publish, MessageContext } from 'lightning/messageService';
 import timelineItemState from '@salesforce/messageChannel/TimelineItemState__c';
+// timeline refresh from external
+//import timelineRefreshData from '@salesforce/messageChannel/TimelineRefreshData__c';
+import getTaskClosedStatus from '@salesforce/apex/TaskUtils.getTaskClosedStatus';
 
 export default class ActivityTimeline extends LightningElement {
     @api recordId;
@@ -32,6 +36,7 @@ export default class ActivityTimeline extends LightningElement {
     @api headerTitle;
     @api headerIcon;
     @api showHeader = false;
+    // showButtons represents close task enablement
     @api showButtons = false;
     @api newTaskAction;
     @api newEventAction;
@@ -56,6 +61,7 @@ export default class ActivityTimeline extends LightningElement {
     @track searchText;
     @api noDataFoundWarnCss;
     @api objectName;
+    @api taskClosedStatus;
 
     @wire(MessageContext)
     messageContext;
@@ -69,8 +75,14 @@ export default class ActivityTimeline extends LightningElement {
         Either_recordId_or_configId_are_empty,
         Search
     }
+
     connectedCallback() {
-        
+        if (this.showButtons) {
+            getTaskClosedStatus()
+                    .then(data => {
+                        this.taskClosedStatus = data;
+                    });
+        }
         Promise.all([
             loadScript(this, MOMENT_JS),
         ]).then(() => {
@@ -95,8 +107,27 @@ export default class ActivityTimeline extends LightningElement {
                     }),
                 );
             });
-    }
 
+        /*
+        // refresh data if a message channel event is fired from outside the managed package
+        this.timelineRefreshDataSubscription = subscribe(
+            this.messageContext,
+            timelineRefreshData,
+            ({ recordId, configId }) => {
+                // refresh data only if the relevant timeline component has been requested to be refreshed, and not the rest of the tabs
+                if((!recordId || recordId == this.recordId) && (!configId || configId == this.configId)) {
+                    this.refreshData();
+                }
+            }
+        );
+        */
+    }
+    /*
+    disconnectedCallback() {
+        unsubscribe(this.timelineRefreshDataSubscription);
+    }
+    */
+   
     refreshData() {
         this.isLoading = true;
         getTimelineItemData({ confIdOrName: this.configId, recordId: this.recordId, dateFilter: this.dateFilterSelection })
@@ -111,7 +142,7 @@ export default class ActivityTimeline extends LightningElement {
 
     processTimelineData(data) {
         moment.locale(LOCALE);
-        moment.lang(LANG);
+        //moment.lang(LANG);
         try {
 
             this.isLoading = false;
@@ -148,8 +179,8 @@ export default class ActivityTimeline extends LightningElement {
                     }else{
                         if (this.objectFilters && 
                             !(
-                                this.objectFilters.includes(configs[i].Object__c) ||
-                                this.objectFilters.includes(configs[i].Relationship_Name__c)
+                                (configs[i].Data_Provider_Type__c != "Apex class" && this.objectFilters.includes(configs[i].Object__c)) ||
+                                (configs[i].Data_Provider_Type__c === "Apex class" && this.objectFilters.includes(configs[i].Relationship_Name__c))
                             )
                         ) {
                             continue;
@@ -345,7 +376,7 @@ export default class ActivityTimeline extends LightningElement {
             if(config.Sub_Title_Fields__c){
                 let subTitleFields = config.Sub_Title_Fields__c.split(',');
                 let itemSubTitle = []; 
-                for(let i=0;i<titleFields.length;i++){
+                for(let i=0;i<subTitleFields.length;i++){
                     if(recordData[subTitleFields[i]]){
                         itemSubTitle.push(recordData[subTitleFields[i]]);
                     }
@@ -429,7 +460,13 @@ export default class ActivityTimeline extends LightningElement {
             childRec.ActivityDate=recordData.ActivityDate;
             //Flag as overdue of the Task is not complete and the due date is past today
             childRec.IsOverdue = !childRec.IsClosed && (new Date().getTime() - Date.parse(childRec.ActivityDate)>0);
-            childRec.assignedToName = (childRec.OwnerId === CURRENT_USER_ID) ? You : recordData.Owner.Name;
+            if (childRec.OwnerId === CURRENT_USER_ID) {
+                childRec.assignedToName = You;
+            } else {
+                if (recordData.Owner) {
+                    childRec.assignedToName = recordData.Owner.Name;
+                }
+            }
             if (recordData.Who) {
                 childRec.whoToName = recordData.Who.Name;
             }
@@ -441,6 +478,8 @@ export default class ActivityTimeline extends LightningElement {
     errorLoadingData(error) {
 
         this.error = true;
+        console.log('The error:');
+        console.log(JSON.stringify(error));
         if (error.body && error.body.exceptionType && error.body.message) {
             this.errorMsg = `[ ${error.body.exceptionType} ] : ${error.body.message}`;
         } else {
