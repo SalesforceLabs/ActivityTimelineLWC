@@ -60,11 +60,12 @@
                                 <lightning-formatted-rich-text value={subTitle}></lightning-formatted-rich-text>
                             </p>    
                         </template>
-                        <div if:true={expanded} class="slds-box slds-theme_shade slds-var-m-top_x-small slds-var-m-horizontal_xx-small slds-var-p-around_medium">
+                        <div if:true={expanded} class="slds-box slds-theme_shade slds-var-m-top_x-small slds-var-m-horizontal_xx-small slds-var-p-around_medium" style="max-height: 500px;overflow: auto;">
                             <template for:each={expandedFieldsToDisplay} for:item="fieldToDisplay">
-                                <lightning-output-field key={fieldToDisplay.apiName} field-name={fieldToDisplay.apiName} tabindex="0">
-                                </lightning-output-field>
-                                
+                                <div key={fieldToDisplay.apiName}>
+                                    <lightning-output-field field-name={fieldToDisplay.apiName}>
+                                    </lightning-output-field>
+                                </div>
                             </template>
                         </div>
                     </div>

@@ -117,8 +117,10 @@ public with sharing class TimelineSOQLUtils {
                 childSoql +=' and '+ childObjConf.Where_Clause__c;
             }
             childSoql +=' order by '+childObjConf.Date_Field__c+' desc';
+
             // the ALL ROWS attribute doesn't work for subqueries, alternative is to use an apex dataprovider
             //childSoql += childObjConf.Include_All_Records__c?' ALL ROWS':'';
+
         }else if(!childObjConf.Object__c.endsWith('__x')){
             if(isDiagnosticMode){
                 childSoql +=' where '+childObjConf.Reference_Field_Name__c+'=\''+recordId+ '\'';
