@@ -110,8 +110,9 @@ global with sharing class SampleApexDataProvider extends AbstractTimelineDataPro
             if (dateFilterStr != null) {
                 query += ' And ' + this.getDateField() + ' = '+dateFilterStr;
             }
+            query += ' And IsDeleted = false';
             query += ' WITH USER_MODE';
-            query += ' Order By ' + this.getDateField() + ' Desc';
+            query += ' Order By ' + this.getDateField() + ' Desc ALL ROWS';
             for (Task item : Database.query(query)) {
                 // return every record as a map
                 Map<String,Object> obj = new Map<String,Object>();

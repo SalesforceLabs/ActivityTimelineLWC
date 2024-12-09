@@ -144,10 +144,11 @@ public with sharing class RecordTimelineDataProvider {
         }
         //get the data from the record
         String soqlStmt ='';
-        if(objectApiName !='ActivityHistory'){
-            soqlStmt ='select Id,'+String.join(newFieldsToQuery,',')+' from '+objectApiName+' where Id=:recordId ALL ROWS';
+        if(objectApiName != 'ActivityHistory' && objectApiName != 'Task' && objectApiName != 'Event'){
+            soqlStmt ='select Id,'+String.join(newFieldsToQuery,',')+' from '+objectApiName+' where Id=:recordId';
         }else{
-            soqlStmt ='select Id,'+String.join(newFieldsToQuery,',')+' from Task where Id=:recordId ALL ROWS';
+            // make sure that the activity objects are queried with ALL ROWS to retrieve archived records also
+            soqlStmt ='select Id,'+String.join(newFieldsToQuery,',')+' from '+objectApiName+' where Id=:recordId ALL ROWS';
 
         }
          
