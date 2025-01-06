@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <apiVersion>49.0</apiVersion>
+    <apiVersion>62.0</apiVersion>
     <assignments>
         <name>Assign_LWC_UI_Support</name>
         <label>Assign LWC UI Support</label>
@@ -434,7 +434,7 @@
             <fieldType>RadioButtons</fieldType>
             <isRequired>false</isRequired>
         </fields>
-        <helpText>&lt;p&gt;You can either display a related record or select an apex class that implements &lt;b&gt;IDataProvider&lt;/b&gt; interface.&lt;/p&gt;</helpText>
+        <helpText>&lt;p&gt;You can either display a related record or select an apex class that implements &lt;b&gt;timeline__IDataProvider&lt;/b&gt; interface.&lt;/p&gt;</helpText>
         <showFooter>true</showFooter>
         <showHeader>true</showHeader>
     </screens>

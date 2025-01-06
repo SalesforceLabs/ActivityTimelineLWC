@@ -39,7 +39,7 @@ private class LC_VisualforceDomainControllerTest {
 
         // The test is not running in Visualforce context,
         // so best we can get here is domain in Apex context.
-        System.assertEquals( URL.getSalesforceBaseUrl().toExternalForm(), domainURL );
+        System.assertEquals( URL.getOrgDomainUrl().toExternalForm(), domainURL );
 
         Test.stopTest();
 
