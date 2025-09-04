@@ -16,10 +16,11 @@ import Collapse_All from '@salesforce/label/c.Collapse_All';
 
 export default class TimelineFilterPanel extends LightningElement {
     @track showFilter=false;
-    @track dateFilterSelection="all_time";
+    @api dateFilterSelection;
     @api objectFilters;
     @api availableObjects;
     @track expandAll=false;
+    @api dateFilterOptions;
     @api showExpandCollapse=false;
 
     label = {
@@ -58,32 +59,47 @@ export default class TimelineFilterPanel extends LightningElement {
     }
 
     get filterAltText(){
-        var allFilters = [
+       /* var allFilters = [
             { label:All_Time, value: 'all_time' },
             { label: Last_7_days, value: 'last_7_days' },
             { label: Next_7_days, value: 'next_7_days' },
             { label: Last_30_days, value: 'last_30_days' },
-        ];
+        ];*/
+        var allFilters = this.dateFilterOptions;
         var that = this;
-        var currentFilterLabel = allFilters.find(function(dtFilter){
-            return dtFilter.value === that.dateFilterSelection;
+        
+
+        var currentFilterLabel='';
+        var dateOptionArray = String(that.dateFilterSelection).replace(';', ',').split(',');
+        
+        for (let i = 0; i < dateOptionArray.length; i++) {
+            
+            if (dateOptionArray[i].length != 0 ) {
+                var FilterLabel = allFilters.find(function(dtFilter){
+                    return dtFilter.value === dateOptionArray[i];
         });
+                currentFilterLabel +=  FilterLabel.label + ';';
+            }
+        }
+
+        
+        
         var selectedObjects="";
         if(!this.objectFilters || this.objectFilters.length == this.availableObjects.length ){
             selectedObjects = All_Types;
         }else{
             selectedObjects = this.objectFilters.join(';');
         }
-        return `${Filters}: ${currentFilterLabel.label} • ${selectedObjects}`;
+        return `${Filters}: ${currentFilterLabel} • ${selectedObjects}`;
     }
-    get dateFilterOptions() {
+    /*get dateFilterOptions() {
         return [
             { label:All_Time, value: 'all_time' },
             { label: Last_7_days, value: 'last_7_days' },
             { label: Next_7_days, value: 'next_7_days' },
             { label: Last_30_days, value: 'last_30_days' },
         ];
-    }
+    }*/
 
     get objectFilterOptions() {
         return this.availableObjects;
