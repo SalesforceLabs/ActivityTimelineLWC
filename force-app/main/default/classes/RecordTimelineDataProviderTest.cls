@@ -43,6 +43,7 @@ public with sharing class RecordTimelineDataProviderTest {
 
         ContentDocumentLink cDocLink  = new ContentDocumentLink(LinkedEntityId=acct.Id,ContentDocumentId=cNote.Id);
         insert cDocLink;
+		
         
     }
 
@@ -95,7 +96,7 @@ public with sharing class RecordTimelineDataProviderTest {
         Task acctTask = new Task(Subject='Test Task last 7',ActivityDate=System.today().addDays(-2),Status='Completed',Description='Test Description',
                                 WhatId=acct.Id,WhoId=ct.Id);
         insert acctTask;
-        TimelineDataResponse resp = RecordTimelineDataProvider.getTimelineItemData(conf.Id, acct.Id,'LAST_N_DAYS:7');
+        TimelineDataResponse resp = RecordTimelineDataProvider.getTimelineItemData(conf.Id, acct.Id,'LAST_N_DAYS:30');
         System.assert(resp.configuration!=null, 'testLast7Days - Timeline configuration is null');
         System.assert(resp.data!=null, 'testLast7Days - Timeline data is null');
 
