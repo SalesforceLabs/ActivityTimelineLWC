@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Date_Filters__c</fullName>
+    <externalId>false</externalId>
+    <label>Date Filters</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>MultiselectPicklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetName>Data_Range</valueSetName>
+    </valueSet>
+    <visibleLines>4</visibleLines>
+</CustomField>

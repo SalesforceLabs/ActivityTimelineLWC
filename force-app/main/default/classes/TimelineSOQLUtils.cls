@@ -86,23 +86,11 @@ public with sharing class TimelineSOQLUtils {
         childSoql += String.join(soqlFields,',');
         
         childSoql +=' from '+(isDiagnosticMode?childObjConf.Object__c:childObjConf.Relationship_Name__c);
+        
         String dateFilterStr;
-        if(dateFilter!=null){
-            System.debug('Date filter= LAST_7_DAYS');
-            switch on dateFilter{
-                when 'last_7_days'{
-                    System.debug('Date filter= LAST_7_DAYS');
-                    dateFilterStr='LAST_N_DAYS:7';
-                }
-                when 'last_30_days'{
-                    System.debug('Date filter= LAST_30_DAYS');
-                    dateFilterStr='LAST_N_DAYS:30';
-                }
-                when 'next_7_days'{
-                    System.debug('Date filter= NEXT_7_DAYS');
-                    dateFilterStr='NEXT_N_DAYS:7';
-                }
-            }
+
+        if( !String.isblank(dateFilter) && !dateFilter.contains('All Time')) {
+            dateFilterStr = dateFilter;
         }
         if(childObjConf.Date_Field__c !=null){
             if(isDiagnosticMode){
@@ -110,9 +98,17 @@ public with sharing class TimelineSOQLUtils {
             }else{
                 childSoql +=' where ' +childObjConf.Date_Field__c+ ' !=null';
             }
-            if(dateFilterStr !=null){
-                childSoql +=' and '+childObjConf.Date_Field__c+'='+dateFilterStr;
+            if( !String.isblank(dateFilterStr)){
+                string dateCondition ='' ; 
+                for (string individualFilter: dateFilterStr.split(',')) {
+                    if(!string.isblank(dateCondition)) {
+                        dateCondition += ' or ';
             } 
+                    dateCondition += childObjConf.Date_Field__c+'='+ individualFilter;
+                }
+                childSoql +=' and ( '+ dateCondition + ') ';
+            } 
+
             if(childObjConf.Where_Clause__c !=null){
                 childSoql +=' and '+ childObjConf.Where_Clause__c;
             }
@@ -124,11 +120,30 @@ public with sharing class TimelineSOQLUtils {
         }else if(!childObjConf.Object__c.endsWith('__x')){
             if(isDiagnosticMode){
                 childSoql +=' where '+childObjConf.Reference_Field_Name__c+'=\''+recordId+ '\'';
-                if(dateFilterStr !=null){
-                    childSoql +=' and '+childObjConf.Reference_Field_Name__c+'=\''+recordId+ '\' and CreatedDate='+dateFilterStr;
+                if(!String.isblank(dateFilterStr)){
+                   // childSoql +=' and '+childObjConf.Reference_Field_Name__c+'=\''+recordId+ '\' and CreatedDate='+dateFilterStr;
+                    string dateCondition ='' ; 
+                    for (string individualFilter: dateFilterStr.split(',')) {
+                        if(!string.isblank(dateCondition)) {
+                            dateCondition += ' or ';
+                        }
+                        dateCondition += ' CreatedDate=' + individualFilter;
+                    }
+                    childSoql +=' and ( '+ dateCondition + ') ';
                 }
             }else{
-                childSoql +=' where '+childObjConf.Reference_Field_Name__c+'=\''+recordId+ '\' and CreatedDate='+dateFilterStr;
+                childSoql +=' where '+childObjConf.Reference_Field_Name__c+'=\''+recordId+ '\'';
+                if(!String.isblank(dateFilterStr)){
+                    // childSoql +=' and '+childObjConf.Reference_Field_Name__c+'=\''+recordId+ '\' and CreatedDate='+dateFilterStr;
+                     string dateCondition ='' ; 
+                     for (string individualFilter: dateFilterStr.split(',')) {
+                         if(!string.isblank(dateCondition)) {
+                             dateCondition += ' or ';
+                         }
+                         dateCondition += ' CreatedDate=' + individualFilter;
+                     }
+                     childSoql +=' and ( '+ dateCondition + ') ';
+                 }
             }
             if(childObjConf.Where_Clause__c !=null){
                 childSoql +=' and '+ childObjConf.Where_Clause__c;

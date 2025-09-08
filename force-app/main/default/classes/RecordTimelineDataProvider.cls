@@ -8,14 +8,12 @@ public with sharing class RecordTimelineDataProvider {
     @AuraEnabled(cacheable=false)
     public static TimelineDataResponse getTimelineItemData(String confIdOrName,String recordId,String dateFilter) {
         List<String> log = new List<String>();
-        if(dateFilter == null){
-            dateFilter='all_time';
-        }
+       
         System.debug('>>>>>>>>>>> confIdOrName='+confIdOrName+', record Id:'+recordId+',dateFilter:'+dateFilter);
         log.add('confIdOrName='+confIdOrName+', record Id:'+recordId+',dateFilter:'+dateFilter);
         if(recordId !=null && confIdOrName!=null){
             if(areObjectAndFieldsAccessible()){
-                Timeline_Configuration__c conf  = [ select Id,Object__c,Display_Relative_Dates__c,
+                Timeline_Configuration__c conf  = [ select Id,Object__c,Display_Relative_Dates__c, Date_Filters__c,Default_Date_Filter__c,
                                                     (SELECT Date_Field__c,Fields_to_Display__c,Icon_Image_Url__c,
                                                             Icon_Name__c,Id,Name,Object_Color__c,Object__c,Relationship_Name__c,
                                                             Title_Field__c,LWC_Ui_Api_Not_Supported__c,Data_Provider_Type__c,
@@ -28,6 +26,9 @@ public with sharing class RecordTimelineDataProvider {
                                                     where (Id=:confIdOrName or Name=:confIdOrName or External_Key__c=:confIdOrName)
                                                 ];
                 if(!conf.Timeline_Child_Objects__r.isEmpty()){
+                    if(dateFilter == null){
+                        dateFilter = String.isblank(conf.Default_Date_Filter__c)? 'All Time': (conf.Default_Date_Filter__c.replaceAll(';',','));
+                    }
                     String soqlToExec = TimelineSOQLUtils.getSOQLForTimeline(conf, recordId,dateFilter,log);
                     System.debug('>>>>>>>>> '+soqlToExec);
                     log.add(soqlToExec);
@@ -177,25 +178,13 @@ public with sharing class RecordTimelineDataProvider {
 
                 String soqlToExecute = 'SELECT Id,Content,CreatedDate,TextPreview,Title,CreatedBy.Name,FileType FROM ContentNote where Id in :docIds ';
                 String dateFilterStr=null;
-                if(dateFilter!=null){
-                    System.debug('Notes Date filter='+datefilter);
-                    switch on dateFilter{
-                        when 'last_7_days'{
-                            System.debug('Date filter= LAST_7_DAYS');
-                            dateFilterStr='LAST_N_DAYS:7';
+                if(dateFilter != null && dateFilter != 'All Time') {
+                    dateFilterStr = dateFilter;
                         }
-                        when 'last_30_days'{
-                            System.debug('Date filter= LAST_30_DAYS');
-                            dateFilterStr='LAST_N_DAYS:30';
-                        }
-                        when 'next_7_days'{
-                            System.debug('Date filter= NEXT_7_DAYS');
-                            dateFilterStr='NEXT_N_DAYS:7';
-                        }
-                    }
-                    if(dateFilterStr != null){
+
+                if(dateFilterStr !=null){ 
+                    System.debug('Notes Date filter='+dateFilterStr);
                         soqlToExecute += ' and CreatedDate='+dateFilterStr;
-                    }
                     System.debug('Notes soqlToExecute = '+soqlToExecute);
                 }
                 log.add('Notes SOQL:'+ soqlToExecute);
@@ -250,4 +239,35 @@ public with sharing class RecordTimelineDataProvider {
         }
         return childObjLabels;
     }
+
+
+    @AuraEnabled(cacheable=true)
+    public static List<Option> getDateFilterOptions(String dateFilters, String dateDefultFilters) {
+        List<Option> options = new List<Option>();
+        set<String> dateFilterSet = new set<String>(); 
+        if (!String.isblank(dateFilters)) {
+            dateFilterSet.addALL(dateFilters.split(';')); 
+        }
+        if (!String.isblank(dateDefultFilters)) {
+            dateFilterSet.addALL(dateDefultFilters.split(';')); 
+        }
+        for( Schema.PicklistEntry pickListVal : Timeline_Configuration__c.Default_Date_Filter__c.getDescribe().getPicklistValues()){
+            if (dateFilterSet.size()==0 || dateFilterSet.contains(pickListVal.getValue())){
+                options.add(new Option(pickListVal.getLabel(),pickListVal.getValue()));
+            }
+        }
+        return options;
+    }
+
+    // Inner class to represent the options for LWC
+    public class Option {
+        @AuraEnabled public String label;
+        @AuraEnabled public String value;
+
+        public Option(String label, String value) {
+            this.label = label;
+            this.value = value;
+        }
+    }
+
 }

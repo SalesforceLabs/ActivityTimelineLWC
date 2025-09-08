@@ -43,6 +43,7 @@ public with sharing class RecordTimelineDataProviderTest {
 
         ContentDocumentLink cDocLink  = new ContentDocumentLink(LinkedEntityId=acct.Id,ContentDocumentId=cNote.Id);
         insert cDocLink;
+		
         
     }
 
@@ -81,7 +82,7 @@ public with sharing class RecordTimelineDataProviderTest {
         Task acctTask = new Task(Subject='Test Task next 2',ActivityDate=System.today().addDays(2),Status='Completed',Description='Test Description',
                                 WhatId=acct.Id,WhoId=ct.Id);
         insert acctTask;
-        TimelineDataResponse resp = RecordTimelineDataProvider.getTimelineItemData(conf.Id, acct.Id,'next_7_days');
+        TimelineDataResponse resp = RecordTimelineDataProvider.getTimelineItemData(conf.Id, acct.Id,'LAST_N_DAYS:7');
         System.assert(resp.configuration!=null, 'testNext7Days - Timeline configuration is null');
         System.assert(resp.data!=null, 'testNext7Days - Timeline data is null');
 
@@ -95,7 +96,7 @@ public with sharing class RecordTimelineDataProviderTest {
         Task acctTask = new Task(Subject='Test Task last 7',ActivityDate=System.today().addDays(-2),Status='Completed',Description='Test Description',
                                 WhatId=acct.Id,WhoId=ct.Id);
         insert acctTask;
-        TimelineDataResponse resp = RecordTimelineDataProvider.getTimelineItemData(conf.Id, acct.Id,'last_7_days');
+        TimelineDataResponse resp = RecordTimelineDataProvider.getTimelineItemData(conf.Id, acct.Id,'LAST_N_DAYS:30');
         System.assert(resp.configuration!=null, 'testLast7Days - Timeline configuration is null');
         System.assert(resp.data!=null, 'testLast7Days - Timeline data is null');
 
@@ -109,7 +110,7 @@ public with sharing class RecordTimelineDataProviderTest {
         Task acctTask = new Task(Subject='Test Task last 30',ActivityDate=System.today().addDays(-10),Status='Completed',Description='Test Description',
                                 WhatId=acct.Id,WhoId=ct.Id);
         insert acctTask;
-        TimelineDataResponse resp = RecordTimelineDataProvider.getTimelineItemData(conf.Id, acct.Id,'last_30_days');
+        TimelineDataResponse resp = RecordTimelineDataProvider.getTimelineItemData(conf.Id, acct.Id,'LAST_N_DAYS:30');
         System.assert(resp.configuration!=null, 'testLast30Days - Timeline configuration is null');
         System.assert(resp.data!=null, 'testLast30Days - Timeline data is null');
 
@@ -130,7 +131,7 @@ public with sharing class RecordTimelineDataProviderTest {
         Account acct = [select Id from Account limit 1];
         Contact ct = new Contact(FirstName='Test',LastName='Contact 2',Email='test2@timeline.com',AccountId=acct.Id);
         insert ct;
-        TimelineDataResponse resp = RecordTimelineDataProvider.getTimelineItemData(timelineConf.Id, acct.Id,'last_30_days');
+        TimelineDataResponse resp = RecordTimelineDataProvider.getTimelineItemData(timelineConf.Id, acct.Id,'LAST_N_DAYS:30');
         System.assert(resp.configuration!=null, 'testLast30DaysWithContact - Timeline configuration is null');
         System.assert(resp.data!=null, 'testLast30DaysWithContact - Timeline data is null');
 
@@ -163,7 +164,7 @@ public with sharing class RecordTimelineDataProviderTest {
         Account acct = [select Id from Account limit 1];
         Test.setMock(HttpCalloutMock.class, new SampleInvoiceMockImpl());
 
-        TimelineDataResponse resp = RecordTimelineDataProvider.getTimelineItemData(timelineConf.Id, acct.Id,'all_time');
+        TimelineDataResponse resp = RecordTimelineDataProvider.getTimelineItemData(timelineConf.Id, acct.Id,'All Time');
         System.assert(resp.apexConfigData!=null,'Apex data is null');
         TimelineDataResponse.ApexConfigAndData apexConfigAndData= resp.apexConfigData.get('Invoices');
         System.assert(apexConfigAndData!=null,'apexConfigAndData is null');
@@ -193,7 +194,7 @@ public with sharing class RecordTimelineDataProviderTest {
         Account acct = [select Id from Account limit 1];
         Test.setMock(HttpCalloutMock.class, new SampleInvoiceMockImpl());
 
-        TimelineDataResponse resp = RecordTimelineDataProvider.getTimelineItemData(timelineConf.Id, acct.Id,'all_time');
+        TimelineDataResponse resp = RecordTimelineDataProvider.getTimelineItemData(timelineConf.Id, acct.Id,'All Time');
         System.assert(resp.apexConfigData!=null,'Apex data is null');
         TimelineDataResponse.ApexConfigAndData apexConfigAndData= resp.apexConfigData.get('Invoices');
         System.assert(apexConfigAndData!=null,'apexConfigAndData is null');
