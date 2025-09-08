@@ -71,6 +71,8 @@ public with sharing class RecordTimelineDataProvider {
                 Schema.sObjectType.Timeline_Configuration__c.fields.Object__c.isAccessible() &&
                 Schema.SObjectType.Timeline_Configuration__c.fields.Display_Relative_Dates__c.isAccessible() &&  
                 Schema.SObjectType.Timeline_Configuration__c.fields.External_Key__c.isAccessible() && 
+				Schema.SObjectType.Timeline_Configuration__c.fields.Date_Filters__c.isAccessible() && 
+				Schema.SObjectType.Timeline_Configuration__c.fields.Default_Date_Filter__c.isAccessible() && 
                 Schema.sObjectType.Timeline_Child_Object__c.fields.Date_Field__c.isAccessible() &&
                 Schema.sObjectType.Timeline_Child_Object__c.fields.Fields_to_Display__c.isAccessible() &&
                 Schema.sObjectType.Timeline_Child_Object__c.fields.Icon_Image_Url__c.isAccessible() &&
@@ -181,12 +183,20 @@ public with sharing class RecordTimelineDataProvider {
                 if(dateFilter != null && dateFilter != 'All Time') {
                     dateFilterStr = dateFilter;
                         }
-
-                if(dateFilterStr !=null){ 
-                    System.debug('Notes Date filter='+dateFilterStr);
-                        soqlToExecute += ' and CreatedDate='+dateFilterStr;
-                    System.debug('Notes soqlToExecute = '+soqlToExecute);
-                }
+						
+				if( !String.isblank(dateFilterStr)){
+					string dateCondition ='' ; 
+					for (string individualFilter: dateFilterStr.split(',')) {
+						if(!string.isblank(dateCondition)) {
+							dateCondition += ' or ';
+						}
+						dateCondition += 'CreatedDate ='+ individualFilter;
+					}
+					System.debug('Notes Date filter='+dateFilterStr);
+					soqlToExecute +=' and ( '+ dateCondition + ') ';
+					System.debug('Notes soqlToExecute = '+soqlToExecute);
+				} 
+			
                 log.add('Notes SOQL:'+ soqlToExecute);
                 for(ContentNote noteDetail : Database.query(soqlToExecute)){
                     notes.add(new ObjectNote(   noteDetail.TextPreview,noteDetail.Content.toString(),
@@ -248,7 +258,7 @@ public with sharing class RecordTimelineDataProvider {
         if (!String.isblank(dateFilters)) {
             dateFilterSet.addALL(dateFilters.split(';')); 
         }
-        if (!String.isblank(dateDefultFilters)) {
+        if (!String.isblank(dateDefultFilters) && dateDefultFilters != 'All Time') {
             dateFilterSet.addALL(dateDefultFilters.split(';')); 
         }
         for( Schema.PicklistEntry pickListVal : Timeline_Configuration__c.Default_Date_Filter__c.getDescribe().getPicklistValues()){
@@ -269,5 +279,4 @@ public with sharing class RecordTimelineDataProvider {
             this.value = value;
         }
     }
-
 }
