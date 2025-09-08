@@ -326,7 +326,8 @@ export default class ActivityTimeline extends LightningElement {
         for(var i=0;i<timelineItems.length;i++){
             //If it's a task and overdue or in the future and not closed
             if( timelineItems[i].isTask){
-                if(!timelineItems[i].IsClosed && (timelineItems[i].IsOverdue || (new Date().getTime() - Date.parse(timelineItems[i].ActivityDate) < 0)))
+                //if(!timelineItems[i].IsClosed && (timelineItems[i].IsOverdue || (new Date().getTime() - Date.parse(timelineItems[i].ActivityDate) < 0)))
+                if (timelineItems[i].IsOverdue)
                 {
                     overdueOrFutureTasks.push(timelineItems[i]);
                 }else{
@@ -458,8 +459,10 @@ export default class ActivityTimeline extends LightningElement {
             childRec.OwnerId = recordData.OwnerId;
             childRec.IsClosed = recordData.IsClosed;
             childRec.ActivityDate=recordData.ActivityDate;
-            //Flag as overdue of the Task is not complete and the due date is past today
-            childRec.IsOverdue = !childRec.IsClosed && (new Date().getTime() - Date.parse(childRec.ActivityDate)>0);
+            if (!config.timeline__Overdue_Field__c) {
+                //Flag as overdue of the Task is not complete and the due date is past today
+                childRec.IsOverdue = !childRec.IsClosed && (new Date().getTime() - Date.parse(childRec.ActivityDate)>0);
+            }
             if (childRec.OwnerId === CURRENT_USER_ID) {
                 childRec.assignedToName = You;
             } else {
