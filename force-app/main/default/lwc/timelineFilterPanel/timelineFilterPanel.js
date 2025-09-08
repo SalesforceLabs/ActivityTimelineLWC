@@ -68,16 +68,17 @@ export default class TimelineFilterPanel extends LightningElement {
         var allFilters = this.dateFilterOptions;
         var that = this;
         
-
+		console.log('FilterAltText - dateFilterOptions: ' + this.dateFilterOptions);
+        console.log('FilterAltText - dateFilterSelection: ' + that.dateFilterSelection);
         var currentFilterLabel='';
         var dateOptionArray = String(that.dateFilterSelection).replace(';', ',').split(',');
         
         for (let i = 0; i < dateOptionArray.length; i++) {
-            
             if (dateOptionArray[i].length != 0 ) {
+				console.log('FilterAltText - Each Selection: ' + dateOptionArray[i]);
                 var FilterLabel = allFilters.find(function(dtFilter){
                     return dtFilter.value === dateOptionArray[i];
-        });
+				});
                 currentFilterLabel +=  FilterLabel.label + ';';
             }
         }
