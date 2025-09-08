@@ -183,12 +183,20 @@ public with sharing class RecordTimelineDataProvider {
                 if(dateFilter != null && dateFilter != 'All Time') {
                     dateFilterStr = dateFilter;
                         }
-
-                if(dateFilterStr !=null){ 
-                    System.debug('Notes Date filter='+dateFilterStr);
-                        soqlToExecute += ' and CreatedDate='+dateFilterStr;
-                    System.debug('Notes soqlToExecute = '+soqlToExecute);
-                }
+						
+				if( !String.isblank(dateFilterStr)){
+					string dateCondition ='' ; 
+					for (string individualFilter: dateFilterStr.split(',')) {
+						if(!string.isblank(dateCondition)) {
+							dateCondition += ' or ';
+						}
+						dateCondition += 'CreatedDate ='+ individualFilter;
+					}
+					System.debug('Notes Date filter='+dateFilterStr);
+					soqlToExecute +=' and ( '+ dateCondition + ') ';
+					System.debug('Notes soqlToExecute = '+soqlToExecute);
+				} 
+			
                 log.add('Notes SOQL:'+ soqlToExecute);
                 for(ContentNote noteDetail : Database.query(soqlToExecute)){
                     notes.add(new ObjectNote(   noteDetail.TextPreview,noteDetail.Content.toString(),
