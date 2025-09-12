@@ -137,6 +137,16 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
+        <field>Timeline_Configuration__c.Default_Date_Filter__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>Timeline_Configuration__c.Date_Filters__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
         <field>Timeline_Configuration__c.External_Key__c</field>
         <readable>true</readable>
     </fieldPermissions>
