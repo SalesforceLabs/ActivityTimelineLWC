@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Default_Date_Filter__c</fullName>
+    <description>Determine the default selected date range options for timeline date filter, If leave empty, all time will be selected</description>
     <externalId>false</externalId>
+    <inlineHelpText>Determine the default selected date range options for timeline date filter, If leave empty, all time will be selected</inlineHelpText>
     <label>Default Date Filter</label>
     <required>false</required>
     <trackTrending>false</trackTrending>

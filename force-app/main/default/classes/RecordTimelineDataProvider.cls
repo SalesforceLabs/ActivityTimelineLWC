@@ -252,14 +252,14 @@ public with sharing class RecordTimelineDataProvider {
 
 
     @AuraEnabled(cacheable=true)
-    public static List<Option> getDateFilterOptions(String dateFilters, String dateDefultFilters) {
+    public static List<Option> getDateFilterOptions(String dateFilters, String dateDefaultFilters) {
         List<Option> options = new List<Option>();
         set<String> dateFilterSet = new set<String>(); 
         if (!String.isblank(dateFilters)) {
             dateFilterSet.addALL(dateFilters.split(';')); 
         }
-        if (!String.isblank(dateDefultFilters) && dateDefultFilters != 'All Time') {
-            dateFilterSet.addALL(dateDefultFilters.split(';')); 
+        if (!String.isblank(dateDefaultFilters) && dateDefaultFilters != 'All Time') {
+            dateFilterSet.addALL(dateDefaultFilters.split(';')); 
         }
         for( Schema.PicklistEntry pickListVal : Timeline_Configuration__c.Default_Date_Filter__c.getDescribe().getPicklistValues()){
             if (dateFilterSet.size()==0 || dateFilterSet.contains(pickListVal.getValue())){

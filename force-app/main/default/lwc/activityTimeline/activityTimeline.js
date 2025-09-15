@@ -95,13 +95,13 @@ export default class ActivityTimeline extends LightningElement {
             getTimelineItemData({ confIdOrName: this.configId, recordId: this.recordId, dateFilter: String(this.dateFilterSelection) })
                 .then(data => {
                     this.processTimelineData(data);
-                    this.dateFilterSelection = data.configuration.Default_Date_Filter__c;
+                    this.dateFilterSelection = data.configuration.timeline__Default_Date_Filter__c;
                     
                     if (!this.dateFilterSelection) {
                         this.dateFilterSelection = 'All Time';
                     }
 
-                    getDateFilterOptions({ dateFilters: data.configuration.Date_Filters__c, dateDefultFilters:this.dateFilterSelection})
+                    getDateFilterOptions({ dateFilters: data.configuration.timeline__Date_Filters__c, dateDefaultFilters:this.dateFilterSelection})
                         .then(data => {
                             console.log('getDateFilterOptions Result' + JSON.stringify(data));
                             this.dateFilterOptions = data.map(option => ({
