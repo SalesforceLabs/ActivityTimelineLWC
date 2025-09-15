@@ -15,7 +15,7 @@
         <default>false</default>
         <label>Next 7 Days</label>
     </customValue>
-	<customValue>
+    <customValue>
         <fullName>LAST_N_WEEKS:2</fullName>
         <default>false</default>
         <label>Last 2 Weeks</label>
@@ -30,12 +30,12 @@
         <default>false</default>
         <label>Last 30 Days</label>
     </customValue>
-	<customValue>
+    <customValue>
         <fullName>NEXT_N_DAYS:30</fullName>
         <default>false</default>
         <label>Next 30 Days</label>
     </customValue>
-	<customValue>
+    <customValue>
         <fullName>LAST_N_WEEKS:4</fullName>
         <default>false</default>
         <label>Last 4 Weeks</label>
@@ -55,29 +55,27 @@
         <default>false</default>
         <label>Next 3 Months</label>
     </customValue>
-	
-	<customValue>
+    <customValue>
         <fullName>LAST_N_MONTHS:6</fullName>
         <default>false</default>
         <label>Last 6 Months</label>
     </customValue>
-	<customValue>
+    <customValue>
         <fullName>NEXT_N_MONTHS:6</fullName>
         <default>false</default>
         <label>Next 6 Months</label>
     </customValue>
-	
-	 <customValue>
+    <customValue>
         <fullName>LAST_N_YEARS:3</fullName>
         <default>false</default>
         <label>Last 3 Years</label>
     </customValue>
-	<customValue>
+    <customValue>
         <fullName>NEXT_N_YEARS:3</fullName>
         <default>false</default>
         <label>Next 3 Years</label>
     </customValue>
-	<customValue>
+    <customValue>
         <fullName>LAST_MONTH</fullName>
         <default>false</default>
         <label>Last Month</label>
@@ -87,13 +85,12 @@
         <default>false</default>
         <label>This Month</label>
     </customValue>
-	<customValue>
+    <customValue>
         <fullName>NEXT_MONTH</fullName>
         <default>false</default>
         <label>Next Month</label>
     </customValue>
-	
-	<customValue>
+    <customValue>
         <fullName>LAST_QUARTER</fullName>
         <default>false</default>
         <label>Last Quarter</label>
@@ -103,12 +100,12 @@
         <default>false</default>
         <label>This Quarter</label>
     </customValue>
-	<customValue>
+    <customValue>
         <fullName>NEXT_QUARTER</fullName>
         <default>false</default>
         <label>Next Quarter</label>
     </customValue>
-	<customValue>
+    <customValue>
         <fullName>LAST_YEAR</fullName>
         <default>false</default>
         <label>Last Year</label>
@@ -118,11 +115,11 @@
         <default>false</default>
         <label>This Year</label>
     </customValue>
-	<customValue>
+    <customValue>
         <fullName>NEXT_YEAR</fullName>
         <default>false</default>
         <label>Next Year</label>
     </customValue>
-    <masterLabel>Data Range</masterLabel>
+    <masterLabel>Date Range Options</masterLabel>
     <sorted>false</sorted>
 </GlobalValueSet>
