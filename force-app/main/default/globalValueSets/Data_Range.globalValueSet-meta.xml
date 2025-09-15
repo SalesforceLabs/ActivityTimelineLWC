@@ -73,7 +73,7 @@
         <label>Last 3 Years</label>
     </customValue>
 	<customValue>
-        <fullName>NEXT_N_Years:3</fullName>
+        <fullName>NEXT_N_YEARS:3</fullName>
         <default>false</default>
         <label>Next 3 Years</label>
     </customValue>

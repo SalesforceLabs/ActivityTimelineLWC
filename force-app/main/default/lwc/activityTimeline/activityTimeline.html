@@ -44,10 +44,12 @@
                                 <c-generic-log-activities record-id={recordId} object-name={objectName} new-task-action={newTaskAction} 
                                 new-event-action={newEventAction} new-call-action={newCallAction} send-email-action={sendEmailAction}></c-generic-log-activities>
                             </div>
+                            <template if:true={isLoadingTimeLineFilter}>
                             <div style="float:right">
                                 <c-timeline-filter-panel object-filters={filteredObjects} available-objects={availableObjects}
                                 onchange={handleFilterChange} onexpandcollapse={handleExpandCollapseEvent} show-expand-collapse={showExpandCollapse} date-filter-selection={dateFilterSelection} date-filter-options={dateFilterOptions}></c-timeline-filter-panel>
                             </div>
+                            </template>
                         </div>
                     </template>
                 </div>
