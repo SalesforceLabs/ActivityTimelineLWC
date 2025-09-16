@@ -26,9 +26,11 @@ public with sharing class RecordTimelineDataProvider {
                                                     where (Id=:confIdOrName or Name=:confIdOrName or External_Key__c=:confIdOrName)
                                                 ];
                 if(!conf.Timeline_Child_Objects__r.isEmpty()){
-                    if(dateFilter == null){
+                    if(String.isblank(dateFilter)){
                         dateFilter = String.isblank(conf.Default_Date_Filter__c)? 'All Time': (conf.Default_Date_Filter__c.replaceAll(';',','));
-                    }
+                    } else {
+					    dateFilter = dateFilter.replaceAll(';',','));
+					}
                     String soqlToExec = TimelineSOQLUtils.getSOQLForTimeline(conf, recordId,dateFilter,log);
                     System.debug('>>>>>>>>> '+soqlToExec);
                     log.add(soqlToExec);
@@ -262,7 +264,7 @@ public with sharing class RecordTimelineDataProvider {
             dateFilterSet.addALL(dateDefaultFilters.split(';')); 
         }
         for( Schema.PicklistEntry pickListVal : Timeline_Configuration__c.Default_Date_Filter__c.getDescribe().getPicklistValues()){
-            if (dateFilterSet.size()==0 || dateFilterSet.contains(pickListVal.getValue())){
+            if (dateFilterSet.size()==0 || dateFilterSet.contains(pickListVal.getValue()) || String.isblank(dateFilters)){
                 options.add(new Option(pickListVal.getLabel(),pickListVal.getValue()));
             }
         }
