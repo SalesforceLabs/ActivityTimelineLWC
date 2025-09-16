@@ -29,7 +29,7 @@ public with sharing class RecordTimelineDataProvider {
                     if(String.isblank(dateFilter)){
                         dateFilter = String.isblank(conf.Default_Date_Filter__c)? 'All Time': (conf.Default_Date_Filter__c.replaceAll(';',','));
                     } else {
-					    dateFilter = dateFilter.replaceAll(';',','));
+					    dateFilter = dateFilter.replaceAll(';',',');
 					}
                     String soqlToExec = TimelineSOQLUtils.getSOQLForTimeline(conf, recordId,dateFilter,log);
                     System.debug('>>>>>>>>> '+soqlToExec);
