@@ -8,59 +8,59 @@ public with sharing class RecordTimelineDataProvider {
     @AuraEnabled(cacheable=false)
     public static TimelineDataResponse getTimelineItemData(String confIdOrName,String recordId,String dateFilter) {
         List<String> log = new List<String>();
-        if(dateFilter == null){
-            dateFilter='all_time';
+        TimelineDataResponse resp = new TimelineDataResponse();
+
+        if (dateFilter == null){
+            dateFilter = 'all_time';
         }
         log.add('confIdOrName='+confIdOrName+', record Id:'+recordId+',dateFilter:'+dateFilter);
-        if(recordId !=null && confIdOrName!=null){
-            if(areObjectAndFieldsAccessible()){
-                Timeline_Configuration__c conf  = [ select Id,Object__c,Display_Relative_Dates__c,
-                                                    (SELECT Date_Field__c,Fields_to_Display__c,Icon_Image_Url__c,
-                                                            Icon_Name__c,Id,Name,Object_Color__c,Object__c,Relationship_Name__c,
-                                                            Title_Field__c,LWC_Ui_Api_Not_Supported__c,Data_Provider_Type__c,
-                                                            Provider_Apex_Classname__c,Reference_Field_Name__c,
-                                                            Where_Clause__c,Display_Object_Name__c,Title_link_Navigate_to__c,
-                                                            Overdue_Field__c,Include_All_Records__c, Sub_Title_Fields__c,
-                                                            Subtitle_Label__c,External_Key__c 
-                                                    FROM Timeline_Child_Objects__r)
-                                                    from Timeline_Configuration__c
-                                                    where (Id=:confIdOrName or Name=:confIdOrName or External_Key__c=:confIdOrName)
-                                                ];
-                if(!conf.Timeline_Child_Objects__r.isEmpty()){
-                    String soqlToExec = TimelineSOQLUtils.getSOQLForTimeline(conf, recordId,dateFilter,log);
-                    log.add(soqlToExec);
-                    SObject theObject;
-                    if(soqlToExec !=null){
-                        List<SObject> result = Database.query(soqlToExec);
-                        log.add('After SOQL query: result = '+JSON.serialize(result));
-                        theObject= result[0];
-                    }
 
-                    Map<String,TimelineDataResponse.ApexConfigAndData> apexData = getDataFromApexProviders(conf, recordId, datefilter);
-                    TimelineDataResponse resp = new TimelineDataResponse(conf,theObject,apexData);
-
-                    List<ObjectNote> relatedNotes = getNotes(conf,recordId,dateFilter,log);
-                    if(relatedNotes !=null){
-                        log.add('Related Notes# = '+relatedNotes.size());
-                        resp.addOtherData('ContentDocumentLink',relatedNotes);
-                    }
-                    resp.objectLabels = getChildObjectLabels(conf);
-                    resp.logs = log;
-                    return resp;
-                }
-                log.add('Child Objects are empty');
-            }
-            log.add('Fields are not accessible');
-            TimelineDataResponse resp = new TimelineDataResponse();
-            resp.logs = log;
-            return resp;
-        }else{
+        // We don't continue, if we are missing the record Id or the configuration Name/external key
+        if (recordId == null || confIdOrName == null){
             log.add('ConfId and/or record Id is null');
-            TimelineDataResponse resp = new TimelineDataResponse();
             resp.logs = log;
             return resp;
         }
 
+        // We also don't continue, if we don't have access to timeline configuration data.
+        if (!areObjectAndFieldsAccessible()){
+            log.add('Fields are not accessible');
+            resp.logs = log;
+            return resp;
+        }
+
+        // If we reached this far, we can query the configuration data for processing
+        // But if we don't get anything, there is nothing to do, and we don't continue.
+        Timeline_Configuration__c conf = getTimeLineConfigurationWithLines(confIdOrName);
+        if (conf.Timeline_Child_Objects__r.isEmpty()){
+            log.add('Child Objects are empty');
+            resp.logs = log;
+            return resp;
+        }
+
+        String soqlToExec = TimelineSOQLUtils.getSOQLForTimeline(conf, recordId,dateFilter,log);
+        log.add(soqlToExec);
+        SObject theObject;
+        if(soqlToExec !=null){
+            // An error will be thrown in the data query, if one uses Data Provider Type = Related Record
+            // and there are multiple Timeline Child Object records, which use the same Relationship Name.
+            // [ System.QueryException ] : Cannot follow the same aggregate relationship twice: <relationship name>
+            List<SObject> result = Database.query(soqlToExec);
+            log.add('After SOQL query: result = '+JSON.serialize(result));
+            theObject= result[0];
+        }
+
+        Map<String,TimelineDataResponse.ApexConfigAndData> apexData = getDataFromApexProviders(conf, recordId, datefilter);
+        resp = new TimelineDataResponse(conf,theObject,apexData);
+
+        List<ObjectNote> relatedNotes = getNotes(conf,recordId,dateFilter,log);
+        if(relatedNotes !=null){
+            log.add('Related Notes# = '+relatedNotes.size());
+            resp.addOtherData('ContentDocumentLink',relatedNotes);
+        }
+        resp.objectLabels = getChildObjectLabels(conf);
+        resp.logs = log;
+        return resp;
     }
 
     private static Boolean areObjectAndFieldsAccessible(){
@@ -204,7 +204,6 @@ public with sharing class RecordTimelineDataProvider {
     }
     private static Map<String,TimelineDataResponse.ApexConfigAndData> getDataFromApexProviders(Timeline_Configuration__c conf,String recordId,String datefilter){
         Map<String,TimelineDataResponse.ApexConfigAndData> apexData = new Map<String,TimelineDataResponse.ApexConfigAndData>();
-        
         for (Timeline_Child_Object__c childObjConf: conf.Timeline_Child_Objects__r){
             if (childObjConf.Data_Provider_Type__c == 'Apex class'){
                 Type providerClass = Type.forName(childObjConf.Provider_Apex_Classname__c);
@@ -237,5 +236,21 @@ public with sharing class RecordTimelineDataProvider {
 
         }
         return childObjLabels;
+    }
+
+    private static Timeline_Configuration__c getTimeLineConfigurationWithLines(String confIdOrName){
+        return [SELECT Id, Object__c, Display_Relative_Dates__c,
+                (SELECT Date_Field__c,Fields_to_Display__c,Icon_Image_Url__c,
+                        Icon_Name__c,Id,Name,Object_Color__c,Object__c,Relationship_Name__c,
+                        Title_Field__c,LWC_Ui_Api_Not_Supported__c,Data_Provider_Type__c,
+                        Provider_Apex_Classname__c,Reference_Field_Name__c,
+                        Where_Clause__c,Display_Object_Name__c,Title_link_Navigate_to__c,
+                        Overdue_Field__c,Include_All_Records__c, Sub_Title_Fields__c,
+                        Subtitle_Label__c,External_Key__c 
+                FROM Timeline_Child_Objects__r)
+                FROM Timeline_Configuration__c
+                WHERE (Id =: confIdOrName OR Name =: confIdOrName OR External_Key__c =: confIdOrName)
+                LIMIT 1
+        ];
     }
 }
