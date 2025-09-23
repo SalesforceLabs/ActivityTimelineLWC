@@ -373,7 +373,7 @@ export default class ActivityTimeline extends LightningElement {
                     itemTitle.push(recordData[titleFields[i]]);
                 }
             }
-            if(config.Sub_Title_Fields__c){
+            if(config.timeline__Sub_Title_Fields__c){
                 let subTitleFields = config.timeline__Sub_Title_Fields__c.split(',');
                 let itemSubTitle = []; 
                 for(let i=0;i<subTitleFields.length;i++){
