@@ -11,7 +11,6 @@ public with sharing class RecordTimelineDataProvider {
         if(dateFilter == null){
             dateFilter='all_time';
         }
-        System.debug('>>>>>>>>>>> confIdOrName='+confIdOrName+', record Id:'+recordId+',dateFilter:'+dateFilter);
         log.add('confIdOrName='+confIdOrName+', record Id:'+recordId+',dateFilter:'+dateFilter);
         if(recordId !=null && confIdOrName!=null){
             if(areObjectAndFieldsAccessible()){
@@ -29,7 +28,6 @@ public with sharing class RecordTimelineDataProvider {
                                                 ];
                 if(!conf.Timeline_Child_Objects__r.isEmpty()){
                     String soqlToExec = TimelineSOQLUtils.getSOQLForTimeline(conf, recordId,dateFilter,log);
-                    System.debug('>>>>>>>>> '+soqlToExec);
                     log.add(soqlToExec);
                     SObject theObject;
                     if(soqlToExec !=null){
@@ -37,6 +35,7 @@ public with sharing class RecordTimelineDataProvider {
                         log.add('After SOQL query: result = '+JSON.serialize(result));
                         theObject= result[0];
                     }
+
                     Map<String,TimelineDataResponse.ApexConfigAndData> apexData = getDataFromApexProviders(conf, recordId, datefilter);
                     TimelineDataResponse resp = new TimelineDataResponse(conf,theObject,apexData);
 
@@ -46,19 +45,19 @@ public with sharing class RecordTimelineDataProvider {
                         resp.addOtherData('ContentDocumentLink',relatedNotes);
                     }
                     resp.objectLabels = getChildObjectLabels(conf);
-                    resp.logs=log;
+                    resp.logs = log;
                     return resp;
                 }
                 log.add('Child Objects are empty');
             }
             log.add('Fields are not accessible');
             TimelineDataResponse resp = new TimelineDataResponse();
-            resp.logs=log;
+            resp.logs = log;
             return resp;
         }else{
             log.add('ConfId and/or record Id is null');
             TimelineDataResponse resp = new TimelineDataResponse();
-            resp.logs=log;
+            resp.logs = log;
             return resp;
         }
 
@@ -118,17 +117,13 @@ public with sharing class RecordTimelineDataProvider {
 
         List<ApexDescribeUtils.FieldData> retFieldMetaData = ApexDescribeUtils.getFieldsForObject(objectApiName,fieldsToQuery);
         for(ApexDescribeUtils.FieldData fld:retFieldMetaData){
-            System.debug('>>>>>> getTimelineItemChildData: fld '+fld);
             if(fld.isNamePointing){
-                System.debug('>>>>>> getTimelineItemChildData: isNamePointing = true');
                 newFieldsToQuery.add(fld.apiName);
                 newFieldsToQuery.add(fld.relationshipName+'.Name');
             }else if(fld.dataType.equalsIgnoreCase('REFERENCE')){
                 newFieldsToQuery.add(fld.apiName);
-                System.debug('>>>>>> getTimelineItemChildData: REFERENCE field ');
                 for(ApexDescribeUtils.FieldData relFldMeta : ApexDescribeUtils.getFieldsForObject(fld.referenceTo)){
                     if(relFldMeta.isNameField){
-                        System.debug('>>>>>> getTimelineItemChildData: relFldMeta.apiName ='+relFldMeta.apiName);
                         fld.referenceToApiName=relFldMeta.apiName;
                         fld.fieldLabel=relFldMeta.fieldLabel;
                         newFieldsToQuery.add(fld.relationshipName+'.'+relFldMeta.apiName);
@@ -152,7 +147,6 @@ public with sharing class RecordTimelineDataProvider {
 
         }
          
-        System.debug('>>>>>> getTimelineItemChildData: soqlStmt = '+soqlStmt);
         List<SObject> result = Database.query(soqlStmt);
         if(!result.isEmpty()){
             TimelineDataResponse response = new TimelineDataResponse(null,result[0],null);
@@ -178,25 +172,20 @@ public with sharing class RecordTimelineDataProvider {
                 String soqlToExecute = 'SELECT Id,Content,CreatedDate,TextPreview,Title,CreatedBy.Name,FileType FROM ContentNote where Id in :docIds ';
                 String dateFilterStr=null;
                 if(dateFilter!=null){
-                    System.debug('Notes Date filter='+datefilter);
                     switch on dateFilter{
                         when 'last_7_days'{
-                            System.debug('Date filter= LAST_7_DAYS');
                             dateFilterStr='LAST_N_DAYS:7';
                         }
                         when 'last_30_days'{
-                            System.debug('Date filter= LAST_30_DAYS');
                             dateFilterStr='LAST_N_DAYS:30';
                         }
                         when 'next_7_days'{
-                            System.debug('Date filter= NEXT_7_DAYS');
                             dateFilterStr='NEXT_N_DAYS:7';
                         }
                     }
-                    if(dateFilterStr != null){
+                    if (dateFilterStr != null){
                         soqlToExecute += ' and CreatedDate='+dateFilterStr;
                     }
-                    System.debug('Notes soqlToExecute = '+soqlToExecute);
                 }
                 log.add('Notes SOQL:'+ soqlToExecute);
                 for(ContentNote noteDetail : Database.query(soqlToExecute)){
@@ -215,12 +204,10 @@ public with sharing class RecordTimelineDataProvider {
     }
     private static Map<String,TimelineDataResponse.ApexConfigAndData> getDataFromApexProviders(Timeline_Configuration__c conf,String recordId,String datefilter){
         Map<String,TimelineDataResponse.ApexConfigAndData> apexData = new Map<String,TimelineDataResponse.ApexConfigAndData>();
+        
         for(Timeline_Child_Object__c childObjConf: conf.Timeline_Child_Objects__r){
             if(childObjConf.Data_Provider_Type__c == 'Apex class'){
-                system.debug(childObjConf);
-                system.debug(childObjConf.Provider_Apex_Classname__c);
                 Type providerClass = Type.forName(childObjConf.Provider_Apex_Classname__c);
-                system.debug(providerClass);
                 AbstractTimelineDataProvider provider = (AbstractTimelineDataProvider)providerClass.newInstance();
                 TimelineDataResponse.ApexConfigAndData apexResp = new TimelineDataResponse.ApexConfigAndData();
                 apexResp.apexData=provider.getData(recordId, dateFilter);
@@ -229,9 +216,10 @@ public with sharing class RecordTimelineDataProvider {
                 apexResp.fieldsWithTypes=provider.getFieldsToDisplayWithTypes();
                 apexResp.isSalesforceObject=provider.isSalesforceObject();
                 apexResp.isUiApiNotSupported=provider.isUiApiNotSupported();
-                apexData.put(childObjConf.Relationship_Name__c,apexResp);
+                apexData.put(childObjConf.Id, apexResp);
             }
         }
+
         return apexData;
     }
 
