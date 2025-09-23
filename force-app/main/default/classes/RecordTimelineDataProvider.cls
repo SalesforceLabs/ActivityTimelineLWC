@@ -205,8 +205,8 @@ public with sharing class RecordTimelineDataProvider {
     private static Map<String,TimelineDataResponse.ApexConfigAndData> getDataFromApexProviders(Timeline_Configuration__c conf,String recordId,String datefilter){
         Map<String,TimelineDataResponse.ApexConfigAndData> apexData = new Map<String,TimelineDataResponse.ApexConfigAndData>();
         
-        for(Timeline_Child_Object__c childObjConf: conf.Timeline_Child_Objects__r){
-            if(childObjConf.Data_Provider_Type__c == 'Apex class'){
+        for (Timeline_Child_Object__c childObjConf: conf.Timeline_Child_Objects__r){
+            if (childObjConf.Data_Provider_Type__c == 'Apex class'){
                 Type providerClass = Type.forName(childObjConf.Provider_Apex_Classname__c);
                 AbstractTimelineDataProvider provider = (AbstractTimelineDataProvider)providerClass.newInstance();
                 TimelineDataResponse.ApexConfigAndData apexResp = new TimelineDataResponse.ApexConfigAndData();
