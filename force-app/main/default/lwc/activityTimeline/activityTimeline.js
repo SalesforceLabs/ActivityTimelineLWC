@@ -88,15 +88,14 @@ export default class ActivityTimeline extends LightningElement {
         ]).then(() => {
             this.momentJSLoaded = true;
             //set the locale with values from translated labels
-            //console.log(new Date() + ':MomentJS loaded');
             getTimelineItemData({ confIdOrName: this.configId, recordId: this.recordId, dateFilter: this.dateFilterSelection })
                 .then(data => {
                     this.processTimelineData(data);
                 })
                 .catch(error => {
                     this.errorLoadingData(error);
-                });
-
+                }
+            );
         })
             .catch(error => {
                 this.dispatchEvent(
@@ -198,10 +197,9 @@ export default class ActivityTimeline extends LightningElement {
                     }
                     let apexConfigAndData;
                     if (configs[i].timeline__Data_Provider_Type__c === "Apex class") {
-                        apexConfigAndData = data.apexConfigData[configs[i].timeline__Relationship_Name__c];
+                        apexConfigAndData = data.apexConfigData[configs[i].Id];
                         relRecords = apexConfigAndData.apexData;
                     }
-                    
                     
                     if (relRecords) {
                         this.hasTimelineData = true;
@@ -238,17 +236,18 @@ export default class ActivityTimeline extends LightningElement {
         } catch (error) {
             this.errorLoadingData(error);
         }
-
-
     }
 
     groupByMonth(timelineItems) {
         var groupedByMonth = this.groupBy(timelineItems, 'monthValue');
-        //Create a monthItem for future timeline items.
+        
+        // Create a monthItem for future timeline items.
         var futureItemGroup = {};
         futureItemGroup.monthValue = Upcoming;
         futureItemGroup.timelineItems = new Array();
         var timelineItemsByMonth = new Array();
+
+        // Add the items to their appropriate month
         for (let [key, value] of Object.entries(groupedByMonth)) {
             var monthItem = {};
             /*if (Date.parse(key) - new Date().getTime() > 0 ) {
@@ -347,7 +346,7 @@ export default class ActivityTimeline extends LightningElement {
         childRec.object = config.timeline__Object__c;
         //Determine navigation behaviour on clcking the title of the timeline item
         //For backwards compatibility, the default is "Record Detail"
-        childRec.navigationBehaviour=config.timeline__Title_link_Navigate_to__c?config. timeline__Title_link_Navigate_to__c:'Record Detail';
+        childRec.navigationBehaviour = config.timeline__Title_link_Navigate_to__c ? config.timeline__Title_link_Navigate_to__c : 'Record Detail';
         if(childRec.object==='ContentDocumentLink'){
             childRec.title = recordData.textPreview;
             childRec.body = recordData.body;
@@ -479,16 +478,15 @@ export default class ActivityTimeline extends LightningElement {
         return childRec;
     }
     errorLoadingData(error) {
-
         this.error = true;
-        console.log('The error:');
-        console.log(JSON.stringify(error));
+
         if (error.body && error.body.exceptionType && error.body.message) {
             this.errorMsg = `[ ${error.body.exceptionType} ] : ${error.body.message}`;
         } else {
             this.errorMsg = JSON.stringify(error);
         }
     }
+    
     get isParametersValid() {
         return (this.recordId != null && this.configId != null)
     }

@@ -88,18 +88,14 @@ public with sharing class TimelineSOQLUtils {
         childSoql +=' from '+(isDiagnosticMode?childObjConf.Object__c:childObjConf.Relationship_Name__c);
         String dateFilterStr;
         if(dateFilter!=null){
-            System.debug('Date filter= LAST_7_DAYS');
             switch on dateFilter{
                 when 'last_7_days'{
-                    System.debug('Date filter= LAST_7_DAYS');
                     dateFilterStr='LAST_N_DAYS:7';
                 }
                 when 'last_30_days'{
-                    System.debug('Date filter= LAST_30_DAYS');
                     dateFilterStr='LAST_N_DAYS:30';
                 }
                 when 'next_7_days'{
-                    System.debug('Date filter= NEXT_7_DAYS');
                     dateFilterStr='NEXT_N_DAYS:7';
                 }
             }
