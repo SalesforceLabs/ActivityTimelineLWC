@@ -8,6 +8,7 @@
 
 import { LightningElement, track, api,wire } from 'lwc';
 import getTimelineItemData from '@salesforce/apex/RecordTimelineDataProvider.getTimelineItemData';
+import getDateFilterOptions from '@salesforce/apex/RecordTimelineDataProvider.getDateFilterOptions';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import { loadScript } from 'lightning/platformResourceLoader';
 import MOMENT_JS from '@salesforce/resourceUrl/moment_js';
@@ -45,6 +46,7 @@ export default class ActivityTimeline extends LightningElement {
     @api additionalMargin;
     @api availableObjects;
     @api initialObjectSelection;
+    @api dateFilterOptions;
     @api objectFilters;
     @api showSearch=false;
     @api showExpandCollapse=false;
@@ -55,8 +57,10 @@ export default class ActivityTimeline extends LightningElement {
     @track errorMsg;
     @track momentJSLoaded = false;
     @api showFilter = false;
-    @track dateFilterSelection = "all_time";
+    @track dateFilterSelection;
+    
     @track isLoading = true;
+    @track isLoadingTimeLineFilter = false;
     @track serverData;
     @track searchText;
     @api noDataFoundWarnCss;
@@ -87,13 +91,32 @@ export default class ActivityTimeline extends LightningElement {
             loadScript(this, MOMENT_JS),
         ]).then(() => {
             this.momentJSLoaded = true;
-            //set the locale with values from translated labels
-            //console.log(new Date() + ':MomentJS loaded');
-            getTimelineItemData({ confIdOrName: this.configId, recordId: this.recordId, dateFilter: this.dateFilterSelection })
+            this.dateFilterSelection ='';
+            getTimelineItemData({ confIdOrName: this.configId, recordId: this.recordId, dateFilter: String(this.dateFilterSelection) })
                 .then(data => {
                     this.processTimelineData(data);
+                    this.dateFilterSelection = data.configuration.Default_Date_Filter__c;
+                    
+                    if (!this.dateFilterSelection) {
+                        this.dateFilterSelection = 'All Time';
+                    }
+
+                    getDateFilterOptions({ dateFilters: data.configuration.Date_Filters__c, dateDefultFilters:this.dateFilterSelection})
+                        .then(data => {
+                            console.log('getDateFilterOptions Result' + JSON.stringify(data));
+                            this.dateFilterOptions = data.map(option => ({
+                                label: option.label,
+                                value: option.value 
+                            }));
+                            this.isLoadingTimeLineFilter = true;
                 })
                 .catch(error => {
+                            console.log(error);
+                    this.errorLoadingData(error);
+                });
+                })
+                .catch(error => {
+                    console.log(error);
                     this.errorLoadingData(error);
                 });
 
@@ -130,7 +153,7 @@ export default class ActivityTimeline extends LightningElement {
    
     refreshData() {
         this.isLoading = true;
-        getTimelineItemData({ confIdOrName: this.configId, recordId: this.recordId, dateFilter: this.dateFilterSelection })
+        getTimelineItemData({ confIdOrName: this.configId, recordId: this.recordId, dateFilter: String(this.dateFilterSelection) })
             .then(data => {
                 this.processTimelineData(data);
             })
@@ -534,14 +557,14 @@ export default class ActivityTimeline extends LightningElement {
         this.showFilter = !this.showFilter;
     }
 
-    get dateFilterOptions() {
+    /*get dateFilterOptions() {
         return [
             { label: 'All Time', value: 'all_time' },
             { label: 'Last 7 days', value: 'last_7_days' },
             { label: 'Next 7 days', value: 'next_7_days' },
             { label: 'Last 30 days', value: 'last_30_days' },
         ];
-    }
+    }*/
 
     get noDataFoundCss(){
         switch (this.noDataFoundWarnCss){

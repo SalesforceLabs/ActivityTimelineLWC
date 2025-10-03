@@ -89,27 +89,27 @@ global with sharing class SampleApexDataProvider extends AbstractTimelineDataPro
         List<Object> result = new List<Object>();
         if (Schema.sObjectType.Task.isAccessible()) {
             String dateFilterStr;
-            if(dateFilter != null) {
-                switch on dateFilter {
-                    when 'last_7_days' {
-                        dateFilterStr = 'LAST_N_DAYS:7';
-                    }
-                    when 'last_30_days' { 
-                        dateFilterStr = 'LAST_N_DAYS:30';
-                    }
-                    when 'next_7_days' {
-                        dateFilterStr = 'NEXT_N_DAYS:7';
-                    }
-                }
+
+            if( !String.isblank(dateFilter) && !dateFilter.contains('All Time')) {
+                dateFilterStr = dateFilter;
             }
             // build query
             String query = 'Select Id, Subject, CreatedDate, ActivityDate, IsClosed ,OwnerId, Owner.Name, WhoId, Who.Name';
             query += ' From Task';
             // specify which lookup field to use
             query += ' Where WhatId = \''+String.escapeSingleQuotes(recordId)+'\'';
-            if (dateFilterStr != null) {
-                query += ' And ' + this.getDateField() + ' = '+dateFilterStr;
+            if( !String.isblank(dateFilterStr)){
+                string dateCondition ='' ; 
+                for (string individualFilter: dateFilterStr.split(',')) {
+                    if(!string.isblank(dateCondition)) {
+                        dateCondition += ' or ';
             }
+                    dateCondition += this.getDateField() +'='+ individualFilter;
+                }
+                query +=' and ( '+ dateCondition + ') ';
+            } 
+
+
             query += ' And IsDeleted = false';
             query += ' WITH USER_MODE';
             query += ' Order By ' + this.getDateField() + ' Desc ALL ROWS';
