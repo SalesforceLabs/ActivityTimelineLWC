@@ -186,6 +186,7 @@ export default class ActivityTimeline extends LightningElement {
                         if(configs[i].timeline__Data_Provider_Type__c === "Apex class"){
                             this.availableObjects.push({ "label": configs[i].timeline__Relationship_Name__c, "value": configs[i].timeline__Relationship_Name__c });
                             this.initialObjectSelection.push(configs[i].timeline__Relationship_Name__c);
+                            
                         }else{
                             this.availableObjects.push({ "label": data.objectLabels[configs[i].timeline__Object__c], "value": configs[i].timeline__Object__c });
                             this.initialObjectSelection.push(configs[i].timeline__Object__c);
@@ -220,7 +221,7 @@ export default class ActivityTimeline extends LightningElement {
                     }
                     let apexConfigAndData;
                     if (configs[i].timeline__Data_Provider_Type__c === "Apex class") {
-                        apexConfigAndData = data.apexConfigData[configs[i].timeline__Relationship_Name__c];
+                        apexConfigAndData = data.apexConfigData[configs[i].Id];
                         relRecords = apexConfigAndData.apexData;
                     }
                     
