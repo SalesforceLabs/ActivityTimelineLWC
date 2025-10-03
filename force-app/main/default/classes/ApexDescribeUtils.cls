@@ -71,7 +71,6 @@ global class ApexDescribeUtils {
             Map<String, Schema.SObjectField> fieldMap = res.fields.getMap();
             for(String fieldKey:fieldMap.keySet()){
                 Schema.SObjectField fld = fieldMap.get(fieldKey);
-                System.debug('>>>>>> calling addFieldMetadata for '+fieldKey);
                 addFieldMetadata(fieldMap,fieldsForObject,fieldKey,objectApiName);
             }
 
@@ -109,7 +108,6 @@ global class ApexDescribeUtils {
         for(Schema.DescribeSobjectResult res : results) {
             Map<String, Schema.SObjectField> fieldMap = res.fields.getMap();
             for(String fieldApiName: fieldsToReturn){
-                System.debug('>>>>>>>>>>> fieldApiName='+fieldApiName);
                 addFieldMetadata(fieldMap,fieldsForObject,fieldApiName,objectApiName);
             }
         }
