@@ -36,7 +36,7 @@ public with sharing class RecordTimelineDataProvider {
             return resp;
         }
 
-		if(String.isblank(dateFilter)){
+		if (String.isblank(dateFilter)){
 			dateFilter = String.isblank(conf.Default_Date_Filter__c)? 'All Time': (conf.Default_Date_Filter__c.replaceAll(';',','));
 		} else {
 			dateFilter = dateFilter.replaceAll(';',',');
@@ -53,7 +53,7 @@ public with sharing class RecordTimelineDataProvider {
 			theObject= result[0];
 		}
 		Map<String,TimelineDataResponse.ApexConfigAndData> apexData = getDataFromApexProviders(conf, recordId, datefilter);
-		TimelineDataResponse resp = new TimelineDataResponse(conf,theObject,apexData);
+		resp = new TimelineDataResponse(conf, theObject, apexData);
 
 		List<ObjectNote> relatedNotes = getNotes(conf,recordId,dateFilter,log);
 		if(relatedNotes !=null){
@@ -61,9 +61,8 @@ public with sharing class RecordTimelineDataProvider {
 			resp.addOtherData('ContentDocumentLink',relatedNotes);
 		}
 		resp.objectLabels = getChildObjectLabels(conf);
-		resp.logs=log;
+		resp.logs = log;
 		return resp;
-
     }
 
     private static Boolean areObjectAndFieldsAccessible(){
@@ -241,10 +240,10 @@ public with sharing class RecordTimelineDataProvider {
         return childObjLabels;
     }
 
-
     @AuraEnabled(cacheable=true)
     public static List<Option> getDateFilterOptions(String dateFilters, String dateDefaultFilters) {
         List<Option> options = new List<Option>();
+
         set<String> dateFilterSet = new set<String>(); 
         if (!String.isblank(dateFilters)) {
             dateFilterSet.addALL(dateFilters.split(';')); 
@@ -257,6 +256,7 @@ public with sharing class RecordTimelineDataProvider {
                 options.add(new Option(pickListVal.getLabel(),pickListVal.getValue()));
             }
         }
+
         return options;
     }
 
@@ -273,6 +273,7 @@ public with sharing class RecordTimelineDataProvider {
 
 	private static Timeline_Configuration__c getTimeLineConfigurationWithLines(String confIdOrName){
         return [SELECT Id, Object__c, Display_Relative_Dates__c,
+                Date_Filters__c, Default_Date_Filter__c,
                 (SELECT Date_Field__c,Fields_to_Display__c,Icon_Image_Url__c,
                         Icon_Name__c,Id,Name,Object_Color__c,Object__c,Relationship_Name__c,
                         Title_Field__c,LWC_Ui_Api_Not_Supported__c,Data_Provider_Type__c,
@@ -286,5 +287,4 @@ public with sharing class RecordTimelineDataProvider {
                 LIMIT 1
         ];
     }
-
 }
