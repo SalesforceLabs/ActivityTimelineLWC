@@ -103,23 +103,20 @@ export default class ActivityTimeline extends LightningElement {
 
                     getDateFilterOptions({ dateFilters: data.configuration.timeline__Date_Filters__c, dateDefaultFilters:this.dateFilterSelection})
                         .then(data => {
-                            console.log('getDateFilterOptions Result' + JSON.stringify(data));
                             this.dateFilterOptions = data.map(option => ({
                                 label: option.label,
                                 value: option.value 
                             }));
                             this.isLoadingTimeLineFilter = true;
+                        })
+                        .catch(error => {
+                            this.errorLoadingData(error);
+                        });
                 })
                 .catch(error => {
-                            console.log(error);
                     this.errorLoadingData(error);
                 });
-                })
-                .catch(error => {
-                    console.log(error);
-                    this.errorLoadingData(error);
-                });
-        })
+            })
             .catch(error => {
                 this.dispatchEvent(
                     new ShowToastEvent({
@@ -166,7 +163,6 @@ export default class ActivityTimeline extends LightningElement {
         moment.locale(LOCALE);
         //moment.lang(LANG);
         try {
-
             this.isLoading = false;
             this.hasTimelineData = false;
             if (data) {
@@ -186,12 +182,11 @@ export default class ActivityTimeline extends LightningElement {
                         if(configs[i].timeline__Data_Provider_Type__c === "Apex class"){
                             this.availableObjects.push({ "label": configs[i].timeline__Relationship_Name__c, "value": configs[i].timeline__Relationship_Name__c });
                             this.initialObjectSelection.push(configs[i].timeline__Relationship_Name__c);
-                        }else{
+                            
+                        } else {
                             this.availableObjects.push({ "label": data.objectLabels[configs[i].timeline__Object__c], "value": configs[i].timeline__Object__c });
                             this.initialObjectSelection.push(configs[i].timeline__Object__c);
                         }
-                        
-
                     }
                     //If the current object was filtered out, don't do any processing
                     if(configs[i].timeline__Object__c ==='ContentDocumentLink'){
@@ -220,7 +215,7 @@ export default class ActivityTimeline extends LightningElement {
                     }
                     let apexConfigAndData;
                     if (configs[i].timeline__Data_Provider_Type__c === "Apex class") {
-                        apexConfigAndData = data.apexConfigData[configs[i].timeline__Relationship_Name__c];
+                        apexConfigAndData = data.apexConfigData[configs[i].Id];
                         relRecords = apexConfigAndData.apexData;
                     }
                     
@@ -260,8 +255,6 @@ export default class ActivityTimeline extends LightningElement {
         } catch (error) {
             this.errorLoadingData(error);
         }
-
-
     }
 
     groupByMonth(timelineItems) {
@@ -500,17 +493,17 @@ export default class ActivityTimeline extends LightningElement {
         }
         return childRec;
     }
-    errorLoadingData(error) {
 
+    errorLoadingData(error) {
         this.error = true;
-        console.log('The error:');
-        console.log(JSON.stringify(error));
+        console.log('Error = ' + JSON.stringify(error));
         if (error.body && error.body.exceptionType && error.body.message) {
             this.errorMsg = `[ ${error.body.exceptionType} ] : ${error.body.message}`;
         } else {
             this.errorMsg = JSON.stringify(error);
         }
     }
+    
     get isParametersValid() {
         return (this.recordId != null && this.configId != null)
     }

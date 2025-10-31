@@ -1,11 +1,11 @@
 @isTest
-
 public with sharing class RecordTimelineDataProviderTest {
     @testSetup static void setupTestData() {
 
         Timeline_Configuration__c timelineConf = new Timeline_Configuration__c(Object__c='Account');
         insert timelineConf;
-        Timeline_Child_Object__c childConf = new Timeline_Child_Object__c(  Date_Field__c='ActivityDate',
+
+        Timeline_Child_Object__c childConf1 = new Timeline_Child_Object__c( Date_Field__c='ActivityDate',
                                                                             Fields_To_Display__c='Subject,Description',
                                                                             Object__c='Task',
                                                                             Relationship_Name__c='Tasks',
@@ -13,45 +13,48 @@ public with sharing class RecordTimelineDataProviderTest {
                                                                             Title_Field__c='Subject',
                                                                             Sub_Title_Fields__c='Type',
                                                                             Timeline_Configuration__c=timelineConf.Id);
-        insert childConf;
 
-        childConf = new Timeline_Child_Object__c(  Date_Field__c='CreatedDate',
+        Timeline_Child_Object__c childConf2 = new Timeline_Child_Object__c( Date_Field__c='CreatedDate',
                                                                             Fields_To_Display__c='Description',
                                                                             Object__c='Case',
                                                                             Relationship_Name__c='Cases',
                                                                             Icon_Name__c='standard:case',
                                                                             Title_Field__c='Subject',
                                                                             Timeline_Configuration__c=timelineConf.Id);
-        insert childConf;
-        childConf = new Timeline_Child_Object__c(   Date_Field__c='CreatedDate',
-                                                    Fields_To_Display__c='Title',
-                                                    Object__c='ContentDocumentLink',
-                                                    Relationship_Name__c='Notes',
-                                                    Icon_Name__c='standard:note',
-                                                    Title_Field__c='Title',
-                                                    Timeline_Configuration__c=timelineConf.Id);
-        insert childConf;
+
+        Timeline_Child_Object__c childConf3 = new Timeline_Child_Object__c( Date_Field__c='CreatedDate',
+                                                                            Fields_To_Display__c='Title',
+                                                                            Object__c='ContentDocumentLink',
+                                                                            Relationship_Name__c='Notes',
+                                                                            Icon_Name__c='standard:note',
+                                                                            Title_Field__c='Title',
+                                                                            Timeline_Configuration__c=timelineConf.Id);
+
+        List<Timeline_Child_Object__c> childConfigs = new List<Timeline_Child_Object__c>();
+        childConfigs.add(childConf1);
+        childConfigs.add(childConf2);
+        childConfigs.add(childConf3);
+        insert childConfigs;
+
         Account acct = new Account(Name='My Timeline Test data account');
         insert acct;
+
         Contact ct = new Contact(FirstName='Test',LastName='Contact',Email='test@timeline.com',AccountId=acct.Id);
         insert ct;
-        Task acctTask = new Task(Subject='Test Task',ActivityDate=System.today(),Status='Completed',Description='Test Description',
+
+        insert new Task(Subject='Test Task',ActivityDate=System.today(),Status='Completed',Description='Test Description',
                                 WhatId=acct.Id,WhoId=ct.Id);
-        insert acctTask;
+
         ContentNote cNote = new ContentNote(Title='Test');
         insert cNote;
 
-        ContentDocumentLink cDocLink  = new ContentDocumentLink(LinkedEntityId=acct.Id,ContentDocumentId=cNote.Id);
-        insert cDocLink;
-		
-        
+        insert new ContentDocumentLink(LinkedEntityId=acct.Id,ContentDocumentId=cNote.Id);
     }
 
     @isTest static void testGetTimelineItemData(){
         Account acct = [select Id from Account limit 1];
         Timeline_Configuration__c conf = [select Id from Timeline_Configuration__c limit 1];
         TimelineDataResponse resp = RecordTimelineDataProvider.getTimelineItemData(conf.Id, acct.Id,null);
-        System.debug('>>>>>>>> resp = '+resp);
         System.assert(resp.configuration!=null, 'Timeline configuration is null');
         System.assert(resp.data!=null, 'Timeline data is null');
     }
@@ -82,7 +85,7 @@ public with sharing class RecordTimelineDataProviderTest {
         Task acctTask = new Task(Subject='Test Task next 2',ActivityDate=System.today().addDays(2),Status='Completed',Description='Test Description',
                                 WhatId=acct.Id,WhoId=ct.Id);
         insert acctTask;
-        TimelineDataResponse resp = RecordTimelineDataProvider.getTimelineItemData(conf.Id, acct.Id,'LAST_N_DAYS:7');
+        TimelineDataResponse resp = RecordTimelineDataProvider.getTimelineItemData(conf.Id, acct.Id,'NEXT_N_DAYS:7');
         System.assert(resp.configuration!=null, 'testNext7Days - Timeline configuration is null');
         System.assert(resp.data!=null, 'testNext7Days - Timeline data is null');
 
@@ -96,7 +99,7 @@ public with sharing class RecordTimelineDataProviderTest {
         Task acctTask = new Task(Subject='Test Task last 7',ActivityDate=System.today().addDays(-2),Status='Completed',Description='Test Description',
                                 WhatId=acct.Id,WhoId=ct.Id);
         insert acctTask;
-        TimelineDataResponse resp = RecordTimelineDataProvider.getTimelineItemData(conf.Id, acct.Id,'LAST_N_DAYS:30');
+        TimelineDataResponse resp = RecordTimelineDataProvider.getTimelineItemData(conf.Id, acct.Id,'LAST_N_DAYS:7');
         System.assert(resp.configuration!=null, 'testLast7Days - Timeline configuration is null');
         System.assert(resp.data!=null, 'testLast7Days - Timeline data is null');
 
@@ -134,22 +137,22 @@ public with sharing class RecordTimelineDataProviderTest {
         TimelineDataResponse resp = RecordTimelineDataProvider.getTimelineItemData(timelineConf.Id, acct.Id,'LAST_N_DAYS:30');
         System.assert(resp.configuration!=null, 'testLast30DaysWithContact - Timeline configuration is null');
         System.assert(resp.data!=null, 'testLast30DaysWithContact - Timeline data is null');
-
     }
 
-    @isTest static void testApexProvider(){
+    @IsTest static void testTwoDataProviderTypes_RelatedRecordAndApex(){
+        // Prepare
         Timeline_Configuration__c timelineConf = new Timeline_Configuration__c(Object__c='Account');
         insert timelineConf;
-        Timeline_Child_Object__c childConf = new Timeline_Child_Object__c(  Date_Field__c='CreatedDate',
+
+        Timeline_Child_Object__c childConf1 = new Timeline_Child_Object__c( Date_Field__c='CreatedDate',
                                                                             Fields_To_Display__c='Name,Email',
                                                                             Object__c='Contact',
                                                                             Relationship_Name__c='Contacts',
                                                                             Icon_Name__c='standard:contact',
                                                                             Title_Field__c='Name',
                                                                             Timeline_Configuration__c=timelineConf.Id);
-        insert childConf;
 
-        childConf = new Timeline_Child_Object__c(  Date_Field__c='invoiceDate',
+        Timeline_Child_Object__c childConf2 = new Timeline_Child_Object__c( Date_Field__c='invoiceDate',
                                                                             Fields_To_Display__c='referenceNumber,description,amount',
                                                                             Object__c='Invoice',
                                                                             Relationship_Name__c='Invoices',
@@ -158,25 +161,37 @@ public with sharing class RecordTimelineDataProviderTest {
                                                                             Data_Provider_Type__c='Apex class',
                                                                             Provider_Apex_Classname__c='SampleApexDataProvider',
                                                                             Timeline_Configuration__c=timelineConf.Id);
-        insert childConf;
+        List<Timeline_Child_Object__c> childConfigs = new List<Timeline_Child_Object__c>();
+        childConfigs.add(childConf1);
+        childConfigs.add(childConf2);
+        insert childConfigs;
 
+        // Execute
         Test.startTest();
-        Account acct = [select Id from Account limit 1];
+        Account acct = [SELECT Id FROM Account LIMIT 1];
         Test.setMock(HttpCalloutMock.class, new SampleInvoiceMockImpl());
-
-        TimelineDataResponse resp = RecordTimelineDataProvider.getTimelineItemData(timelineConf.Id, acct.Id,'All Time');
-        System.assert(resp.apexConfigData!=null,'Apex data is null');
-        TimelineDataResponse.ApexConfigAndData apexConfigAndData= resp.apexConfigData.get('Invoices');
-        System.assert(apexConfigAndData!=null,'apexConfigAndData is null');
-        System.assert(apexConfigAndData.apexData!=null,'Invoice data is null');
-        System.assert(apexConfigAndData.baseUrlForRecordDetail!=null,'baseUrlForRecordDetail is null');
-        System.assert(apexConfigAndData.fieldsWithTypes!=null,'fieldsWithTypes is null');
-        System.assert(apexConfigAndData.recordIdentifierField!=null,'recordIdentifierField is null');
+        TimelineDataResponse resp = RecordTimelineDataProvider.getTimelineItemData(timelineConf.Id, acct.Id, 'All Time');
         Test.stopTest();
+
+        // Assert
+        Assert.isNotNull(resp.apexConfigData,'Apex data is null');
+
+        // Check that we get data for the Related Record data provider type
+        TimelineDataResponse.ApexConfigAndData configurationDataFromTCO1 = resp.apexConfigData.get(childConf1.Id);
+        Assert.isNotNull(resp.configuration, 'Timeline configuration is null');
+        Assert.isNotNull(resp.data, 'Timeline related record data is null');
+
+        // Check that we get data for the Apex Data Provider data provider type
+        TimelineDataResponse.ApexConfigAndData apexDataFromTCO2 = resp.apexConfigData.get(childConf2.Id);
+        Assert.isNotNull(apexDataFromTCO2,'apexConfigAndData is null');
+        Assert.isNotNull(apexDataFromTCO2.apexData,'Invoice data is null');
+        Assert.isNotNull(apexDataFromTCO2.baseUrlForRecordDetail,'baseUrlForRecordDetail is null');
+        Assert.isNotNull(apexDataFromTCO2.fieldsWithTypes,'fieldsWithTypes is null');
+        Assert.isNotNull(apexDataFromTCO2.recordIdentifierField,'recordIdentifierField is null');
     }
 
-
-    @isTest static void testApexProviderOnly(){
+    @IsTest static void testApexProviderOnly(){
+        // Prepare
         Timeline_Configuration__c timelineConf = new Timeline_Configuration__c(Object__c='Account');
         insert timelineConf;
         Timeline_Child_Object__c childConf = new Timeline_Child_Object__c(  Date_Field__c='invoiceDate',
@@ -190,20 +205,20 @@ public with sharing class RecordTimelineDataProviderTest {
                                                                             Timeline_Configuration__c=timelineConf.Id);
         insert childConf;
 
+        // Execute
         Test.startTest();
-        Account acct = [select Id from Account limit 1];
+        Account acct = [SELECT Id FROM Account LIMIT 1];
         Test.setMock(HttpCalloutMock.class, new SampleInvoiceMockImpl());
-
-        TimelineDataResponse resp = RecordTimelineDataProvider.getTimelineItemData(timelineConf.Id, acct.Id,'All Time');
-        System.assert(resp.apexConfigData!=null,'Apex data is null');
-        TimelineDataResponse.ApexConfigAndData apexConfigAndData= resp.apexConfigData.get('Invoices');
-        System.assert(apexConfigAndData!=null,'apexConfigAndData is null');
-        System.assert(apexConfigAndData.apexData!=null,'Invoice data is null');
-        System.assert(apexConfigAndData.baseUrlForRecordDetail!=null,'baseUrlForRecordDetail is null');
-        System.assert(apexConfigAndData.fieldsWithTypes!=null,'fieldsWithTypes is null');
-        System.assert(apexConfigAndData.recordIdentifierField!=null,'recordIdentifierField is null');
+        TimelineDataResponse resp = RecordTimelineDataProvider.getTimelineItemData(timelineConf.Id, acct.Id, 'All Time');
         Test.stopTest();
+
+        // Assert
+        Assert.isNotNull(resp.apexConfigData, 'Apex data is null');
+        TimelineDataResponse.ApexConfigAndData apexConfigAndDataFromTCO = resp.apexConfigData.get(childConf.Id);
+        Assert.isNotNull(apexConfigAndDataFromTCO, 'apexConfigAndData is null');
+        Assert.isNotNull(apexConfigAndDataFromTCO.apexData, 'Invoice data is null');
+        Assert.isNotNull(apexConfigAndDataFromTCO.baseUrlForRecordDetail, 'baseUrlForRecordDetail is null');
+        Assert.isNotNull(apexConfigAndDataFromTCO.fieldsWithTypes, 'fieldsWithTypes is null');
+        Assert.isNotNull(apexConfigAndDataFromTCO.recordIdentifierField, 'recordIdentifierField is null');
     }
-
-
 }
