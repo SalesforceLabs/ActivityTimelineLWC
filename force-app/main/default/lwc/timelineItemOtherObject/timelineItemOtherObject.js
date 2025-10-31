@@ -141,7 +141,7 @@ export default class TimelineItemOtherObject extends LightningElement {
             });
         }
         //Data loaded via a Apex data provider so just display the data from the `externalData` attribute
-        if(this.isExternalServiceData && !this.isSalesforceObject){
+        if(this.isExternalServiceData){
             this.dataLoaded=true;
             this.fieldData = this.populateFieldData(this.externalData,this.externalDataFieldTypes);
         }
