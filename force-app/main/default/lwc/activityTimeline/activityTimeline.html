@@ -69,6 +69,19 @@
                                 month-as-duration={theMonth.timeFromNow} timeline-items={theMonth.timelineItems} onrefresh={refreshData}>
                             </c-timeline-month>
                         </template>
+
+                        <template lwc:if={showPagination}>
+                            <div
+                                class="slds-col slds-border_top slds-p-vertical_x-small slds-p-horizontal_small " style="vertical-align: middle">
+                                 <lightning-button variant="base"  title="First" icon-name="utility:jump_to_left" disabled={isFirstPage} onclick={handleFirst}></lightning-button>
+                                 <lightning-button variant="base"  icon-position="left" label="Previous" title="Previous" icon-name="utility:chevronleft" disabled={isFirstPage} onclick={handlePrevious}></lightning-button>
+                                 &nbsp;&nbsp;&nbsp;&nbsp;
+                                 <lightning-button  variant="base" icon-position="right" label="Next" title="Next" icon-name="utility:chevronright" disabled={isLastPage} onclick={handleNext}></lightning-button>
+                                 <lightning-button  variant="base" title="Last" icon-name="utility:jump_to_right" disabled={isLastPage} onclick={handleLast}></lightning-button>
+                                 
+                                 <span class="slds-float_right slds-float_center">Page <input type="number" style="width:20px" value={currentPage} onchange={handlePageInputChange} min="1" max={totalPages}/> of {totalPages}</span>
+                            </div>
+                        </template>
                     </template>
                     <template if:false={hasTimelineData}>
                         <span class={noDataFoundCss}>

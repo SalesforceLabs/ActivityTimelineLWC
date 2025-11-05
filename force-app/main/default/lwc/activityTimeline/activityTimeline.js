@@ -50,6 +50,13 @@ export default class ActivityTimeline extends LightningElement {
     @api objectFilters;
     @api showSearch=false;
     @api showExpandCollapse=false;
+
+    currentPage = 1;
+    @api pageSize; // Default items per page for pagination
+    filteredRecords=[];//records to be displayed on the page after search
+    visibleRecords;//records to be displayed on one particular page after pagination
+    totalPages;
+
     @track childRecords;
     @track timelineItemsByMonth;
     @track hasTimelineData;
@@ -87,6 +94,10 @@ export default class ActivityTimeline extends LightningElement {
                         this.taskClosedStatus = data;
                     });
         }
+
+        //default pageSize
+        this.pageSize = this.pageSize ?  this.pageSize : 20;
+
         Promise.all([
             loadScript(this, MOMENT_JS),
         ]).then(() => {
@@ -247,8 +258,11 @@ export default class ActivityTimeline extends LightningElement {
                 unsortedRecords.sort(function (a, b) {
                     return new Date(b.dateValueDB) - new Date(a.dateValueDB);
                 });
-                this.timelineItemsByMonth = this.groupByMonth(unsortedRecords);
-                this.childRecords = unsortedRecords;
+                this.filteredRecords = unsortedRecords;             
+               
+                this.setPagination();
+                //this.timelineItemsByMonth = this.groupByMonth(this.visibleRecords);
+                //this.childRecords = this.visibleRecords;
             } else {
                 this.hasTimelineData = false;
             }
@@ -603,5 +617,67 @@ export default class ActivityTimeline extends LightningElement {
             (rv[x[key]] = rv[x[key]] || []).push(x);
             return rv;
         }, {});
+    }
+
+
+     //for pagination related attributes
+    get showPagination() {
+        return this.filteredRecords.length > this.pageSize;
+    }
+
+    get isFirstPage() {
+        return this.currentPage === 1;
+    }
+
+    get isLastPage() {
+        return this.currentPage === this.totalPages;
+    }
+
+    // Pagination logic
+    setPagination() {
+       this.totalPages = Math.ceil(this.filteredRecords.length / this.pageSize);
+       this.updateVisibleRecords();
+    }
+
+    //update the array which is used to display the records on the UI for pagination
+    updateVisibleRecords() {
+        const start = (this.currentPage - 1) * this.pageSize;
+        const end = start + this.pageSize;
+        this.visibleRecords = this.filteredRecords.slice(start, end);
+        this.timelineItemsByMonth = this.groupByMonth(this.visibleRecords);
+        this.childRecords = this.visibleRecords;
+     }
+
+    // Pagination navigation
+    handlePrevious() {
+        if (this.currentPage > 1) {
+            this.currentPage--;
+            this.updateVisibleRecords();
+        }
+        
+    }
+    handleFirst() {
+            this.currentPage = 1;
+            this.updateVisibleRecords();
+    }
+
+    handleLast() {
+            this.currentPage = this.totalPages;
+            this.updateVisibleRecords();
+    }
+
+    handleNext() {
+        if (this.currentPage < this.totalPages) {
+            this.currentPage++;
+            this.updateVisibleRecords();
+        }
+    }
+
+    handlePageInputChange(event) {
+        const newPage = parseInt(event.target.value, 10);
+        if (newPage >= 1 && newPage <= this.totalPages) {
+            this.currentPage = newPage;
+            this.updateVisibleRecords();
+        }
     }
 }
