@@ -14,6 +14,7 @@
         
         <targetConfig targets="lightning__RecordPage">
             <property name="configId" type="String" label="Record Id, Name or External Key of the Timeline configuration to use"/>
+            <property name="pageSize" type="Integer" label="Set timeline item size for each page, default 20 "/>
             <property name="showHeader" type="Boolean" label="Check to display the header"/>
             <property name="headerTitle" type="String" label="Title to display on the header"/>
             <property name="headerIcon" type="String" label="Header icon to display on the header (SLDS Icons)"/>
