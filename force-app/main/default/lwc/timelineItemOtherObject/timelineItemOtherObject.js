@@ -34,7 +34,7 @@ export default class TimelineItemOtherObject extends LightningElement {
     @api isOverdue=false;
     @api expanded;
     @api themeInfo;
-    @api isSalesforceObject=false;
+    @api isSalesforceObject = false; // Value can still be set by a parent component, but no longer used within this component
     @api currentUserTimezone;
     @track dataLoaded = false;
  
@@ -79,16 +79,17 @@ export default class TimelineItemOtherObject extends LightningElement {
     }
 
     @api 
-    get isExternalServiceData(){
-        if(this.isSalesforceObject){
-            return false;
-        }else{
-            return this.isDataFromExternalService;
+    get isExternalServiceData() {
+        // Check if externalData is populated (if it is then we know it's an external service)
+        if (this.externalData) {
+            return true;
         }
+        // Otherwise, return the value set by the setter (this can be passed in via other parent components)
+        return this.isDataFromExternalService;
     }
 
-    set isExternalServiceData(value){
-        this.isDataFromExternalService=value;
+    set isExternalServiceData(value) {
+        this.isDataFromExternalService = value;
     }
 
     get hasIconName() {
@@ -141,8 +142,8 @@ export default class TimelineItemOtherObject extends LightningElement {
             });
         }
         //Data loaded via a Apex data provider so just display the data from the `externalData` attribute
-        if(this.isExternalServiceData){
-            this.dataLoaded=true;
+        if (this.isExternalServiceData) {
+            this.dataLoaded = true;
             this.fieldData = this.populateFieldData(this.externalData,this.externalDataFieldTypes);
         }
     }
