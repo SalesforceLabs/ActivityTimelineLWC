@@ -41,7 +41,7 @@ global with sharing class SampleApexDataProvider extends AbstractTimelineDataPro
     }
 
     /**
-     * @description The fields that are showed when expanded (flow step: Display fields)
+     * @description The fields that are shown when expanded (flow step: Display fields)
      * @return  List<String>
      */
     global override List<String> getFieldsToDisplay() {
