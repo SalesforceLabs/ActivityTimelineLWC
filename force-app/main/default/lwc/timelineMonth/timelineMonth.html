@@ -12,7 +12,9 @@
                 class="slds-button slds-section__title-action">
                 <lightning-icon icon-name={iconName} size="x-small" class="slds-p-around_x-small">
                 </lightning-icon>
-                <span class="slds-col_bump-right timelineMonthTitle">{month}</span>
+                <span class="slds-col_bump-right timelineMonthTitle">
+                    <lightning-formatted-date-time value={month} month="short" day="2-digit"></lightning-formatted-date-time> 
+                </span>
                 <span class="timelineMonthTitle">{monthAsDuration}</span>
             </button>
         </h3>

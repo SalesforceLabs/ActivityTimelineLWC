@@ -300,7 +300,7 @@ export default class ActivityTimeline extends LightningElement {
                     return new Date(b.dateValueDB) - new Date(a.dateValueDB);
                 });
                 if(tasksAndChildRecords.length>0){
-                    monthItem.monthValue = moment(key).format("MMM  •  YYYY");
+                    monthItem.monthValue = moment(key);
                     monthItem.firstOfMonth = moment(key).format("YYYY-MM-01");
                     //If the month is current month don't set the timeFromNow
                     if(!(moment(new Date()).format("YYYY-MM")===moment(monthItem.firstOfMonth).format("YYYY-MM"))){
