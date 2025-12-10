@@ -24,16 +24,22 @@
                         <div class="slds-grid slds-grid_vertical-align-center slds-truncate_container_75 slds-no-space">
                             <h3 class="slds-truncate" title={title}>
                                 <template if:true={canBeClosed}>
-                                    <lightning-input type="checkbox" style="float: left;top: -2px;width:25px" data-id="checkbox" onchange={handleClose}></lightning-input>
+                                    <lightning-input type="checkbox" style="float: left;top: -2px;width:25px"
+                                        data-id="checkbox" onchange={handleClose}></lightning-input>
                                 </template>
-                                <a onclick={navigateToTask}>
-                                    <template if:true={hasSubject}>
-                                        <strong>{title}</strong>
-                                    </template>
-                                    <template if:false={hasSubject}>
-                                        <strong>{label.No_Subject}</strong>
-                                    </template>
-                                </a>
+                                <template if:true={shouldNavigateToRecord}>
+                                    <a onclick={navigateToTask}>
+                                        <template if:true={hasSubject}>
+                                            <strong>{title}</strong>
+                                        </template>
+                                        <template if:false={hasSubject}>
+                                            <strong>{label.No_Subject}</strong>
+                                        </template>
+                                    </a>
+                                </template>
+                                <template if:false={shouldNavigateToRecord}>
+                                    <lightning-formatted-rich-text value={title}></lightning-formatted-rich-text>
+                                </template>
                                 <template if:true={isOverdue}>
                                     &nbsp;<lightning-icon icon-name="utility:warning" variant="error" size="x-small" alternative-text={label.Overdue}></lightning-icon>
                                 </template>
@@ -42,13 +48,13 @@
                         <div class=" slds-timeline__actions_inline">
                             <template if:true={isOverdue}>
                                 <strong><p class="slds-timeline__date overdue">
-                                    <template if:false={displayRelativeDates}>
-                                        <lightning-formatted-date-time value={dateValue}></lightning-formatted-date-time>
-                                    </template>
-                                    <template if:true={displayRelativeDates}>
-                                        {dateValue}
-                                    </template>
-                                </p></strong>
+                                        <template if:false={displayRelativeDates}>
+                                            <lightning-formatted-date-time value={dateValue}></lightning-formatted-date-time>
+                                        </template>
+                                        <template if:true={displayRelativeDates}>
+                                            {dateValue}
+                                        </template>
+                                    </p></strong>
                             </template>
                             <template if:false={isOverdue}>
                                 <p class="slds-timeline__date">
@@ -60,17 +66,17 @@
                                     </template>
                                 </p>
                             </template>
-                            
+
                         </div>
                     </div>
                     <template if:true={hasSubTitle}>
                         <p class="slds-var-m-horizontal_xx-small slds-truncate" title={subTitle}>
                             <span class="slds-text-title slds-var-p-right_xx-small"><b>{subTitleLabel}</b></span>
                             <lightning-formatted-rich-text value={subTitle}></lightning-formatted-rich-text>
-                        </p>    
+                        </p>
                     </template>
                     <p if:true={isTask} class="slds-var-m-horizontal_xx-small">
-                        <a onclick={navigateToOwner}>{assignedToName}</a> 
+                        <a onclick={navigateToOwner}>{assignedToName}</a>
                         <template if:false={hasWhoTo}>
                             <template if:true={isFutureTask}>
                                 <span> {label.have_a_task}</span>
@@ -86,7 +92,7 @@
                             <template if:true={isFutureTask}>
                                 <span> {label.have_a_upoming_task_with}&nbsp;</span>
                             </template>
-                            
+
                             <a onclick={navigateToWho}>{whoToName}</a>
                         </template>
                     </p>
@@ -97,7 +103,7 @@
                         <a if:true={hasWhoTo} onclick={navigateToWho}>{whoToName}</a>
                     </p>
                     <p if:true={isEmail} class="slds-var-m-horizontal_xx-small">
-                        <a onclick={navigateToOwner}>{assignedToName}</a> 
+                        <a onclick={navigateToOwner}>{assignedToName}</a>
                         <span if:false={hasWhoTo}> {label.sent_an_email}</span>
                         <span if:true={hasWhoTo}> {label.sent_an_email_to} </span>
                         <a if:true={hasWhoTo} onclick={navigateToWho}>{whoToName}</a>
