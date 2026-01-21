@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>DateFilterMatch</fullName>
+    <active>true</active>
+    <description>Makes sure the default date filters are part of the date filters</description>
+    <errorConditionFormula>OR(
+AND(INCLUDES( Default_Date_Filter__c , &quot;All Time&quot;), NOT(INCLUDES( Date_Filters__c , &quot;All Time&quot;))),
+AND(INCLUDES( Default_Date_Filter__c , &quot;LAST_N_DAYS:7&quot;), NOT(INCLUDES( Date_Filters__c , &quot;LAST_N_DAYS:7&quot;))),
+AND(INCLUDES( Default_Date_Filter__c , &quot;NEXT_N_DAYS:7&quot;), NOT(INCLUDES( Date_Filters__c , &quot;NEXT_N_DAYS:7&quot;))),
+AND(INCLUDES( Default_Date_Filter__c , &quot;LAST_N_WEEKS:2&quot;), NOT(INCLUDES( Date_Filters__c , &quot;LAST_N_WEEKS:2&quot;))),
+AND(INCLUDES( Default_Date_Filter__c , &quot;NEXT_N_WEEKS:2&quot;), NOT(INCLUDES( Date_Filters__c , &quot;NEXT_N_WEEKS:2&quot;))),
+AND(INCLUDES( Default_Date_Filter__c , &quot;LAST_N_DAYS:30&quot;), NOT(INCLUDES( Date_Filters__c , &quot;LAST_N_DAYS:30&quot;))),
+AND(INCLUDES( Default_Date_Filter__c , &quot;NEXT_N_DAYS:30&quot;), NOT(INCLUDES( Date_Filters__c , &quot;NEXT_N_DAYS:30&quot;))),
+AND(INCLUDES( Default_Date_Filter__c , &quot;LAST_N_WEEKS:4&quot;), NOT(INCLUDES( Date_Filters__c , &quot;LAST_N_WEEKS:4&quot;))),
+AND(INCLUDES( Default_Date_Filter__c , &quot;NEXT_N_WEEKS:4&quot;), NOT(INCLUDES( Date_Filters__c , &quot;NEXT_N_WEEKS:4&quot;))),
+AND(INCLUDES( Default_Date_Filter__c , &quot;LAST_N_MONTHS:3&quot;), NOT(INCLUDES( Date_Filters__c , &quot;LAST_N_MONTHS:3&quot;))),
+AND(INCLUDES( Default_Date_Filter__c , &quot;NEXT_N_MONTHS:3&quot;), NOT(INCLUDES( Date_Filters__c , &quot;NEXT_N_MONTHS:3&quot;))),
+AND(INCLUDES( Default_Date_Filter__c , &quot;LAST_N_MONTHS:6&quot;), NOT(INCLUDES( Date_Filters__c , &quot;LAST_N_MONTHS:6&quot;))),
+AND(INCLUDES( Default_Date_Filter__c , &quot;NEXT_N_MONTHS:6&quot;), NOT(INCLUDES( Date_Filters__c , &quot;NEXT_N_MONTHS:6&quot;))),
+AND(INCLUDES( Default_Date_Filter__c , &quot;LAST_N_YEARS:3&quot;), NOT(INCLUDES( Date_Filters__c , &quot;LAST_N_YEARS:3&quot;))),
+AND(INCLUDES( Default_Date_Filter__c , &quot;NEXT_N_YEARS:3&quot;), NOT(INCLUDES( Date_Filters__c , &quot;NEXT_N_YEARS:3&quot;))),
+AND(INCLUDES( Default_Date_Filter__c , &quot;LAST_MONTH&quot;), NOT(INCLUDES( Date_Filters__c , &quot;LAST_MONTH&quot;))),
+AND(INCLUDES( Default_Date_Filter__c , &quot;THIS_MONTH&quot;), NOT(INCLUDES( Date_Filters__c , &quot;THIS_MONTH&quot;))),
+AND(INCLUDES( Default_Date_Filter__c , &quot;NEXT_MONTH&quot;), NOT(INCLUDES( Date_Filters__c , &quot;NEXT_MONTH&quot;))),
+AND(INCLUDES( Default_Date_Filter__c , &quot;LAST_QUARTER&quot;), NOT(INCLUDES( Date_Filters__c , &quot;LAST_QUARTER&quot;))),
+AND(INCLUDES( Default_Date_Filter__c , &quot;THIS_QUARTER&quot;), NOT(INCLUDES( Date_Filters__c , &quot;THIS_QUARTER&quot;))),
+AND(INCLUDES( Default_Date_Filter__c , &quot;NEXT_QUARTER&quot;), NOT(INCLUDES( Date_Filters__c , &quot;NEXT_QUARTER&quot;))),
+AND(INCLUDES( Default_Date_Filter__c , &quot;LAST_YEAR&quot;), NOT(INCLUDES( Date_Filters__c , &quot;LAST_YEAR&quot;))),
+AND(INCLUDES( Default_Date_Filter__c , &quot;THIS_YEAR&quot;), NOT(INCLUDES( Date_Filters__c , &quot;THIS_YEAR&quot;))),
+AND(INCLUDES( Default_Date_Filter__c , &quot;NEXT_YEAR&quot;), NOT(INCLUDES( Date_Filters__c , &quot;NEXT_YEAR&quot;)))
+)</errorConditionFormula>
+    <errorMessage>Chosen Default Date Filter values need to be a subset of chosen Date Filters</errorMessage>
+</ValidationRule>
