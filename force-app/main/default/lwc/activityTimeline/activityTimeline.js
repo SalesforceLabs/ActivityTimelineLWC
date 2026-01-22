@@ -171,7 +171,7 @@ export default class ActivityTimeline extends LightningElement {
     }
 
     processTimelineData(data) {
-        moment.locale(LOCALE);
+        //moment.locale(LANG);
         //moment.lang(LANG);
         try {
             this.isLoading = false;
@@ -300,8 +300,12 @@ export default class ActivityTimeline extends LightningElement {
                     return new Date(b.dateValueDB) - new Date(a.dateValueDB);
                 });
                 if(tasksAndChildRecords.length>0){
-                    monthItem.monthValue = moment(key).format("MMM  •  YYYY");
                     monthItem.firstOfMonth = moment(key).format("YYYY-MM-01");
+                    const formatted = new Intl.DateTimeFormat(LANG, {
+                        month: 'long',
+                        year: 'numeric'
+                    }).format(Date.parse(monthItem.firstOfMonth));
+                    monthItem.monthValue = formatted;
                     //If the month is current month don't set the timeFromNow
                     if(!(moment(new Date()).format("YYYY-MM")===moment(monthItem.firstOfMonth).format("YYYY-MM"))){
                         monthItem.timeFromNow = moment(monthItem.firstOfMonth).fromNow();

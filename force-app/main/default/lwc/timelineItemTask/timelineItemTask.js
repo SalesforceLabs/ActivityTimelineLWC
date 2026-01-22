@@ -70,6 +70,9 @@ export default class TimelineItemTask extends NavigationMixin(LightningElement) 
     @api taskClosedStatus;
     @api themeInfo;
 
+    //Default navigation behaviour is to go to the record detail
+    @api navigationBehaviour = "Record Detail";
+
     label = {
         Toggle_Details,
         had_a_task,
@@ -238,6 +241,10 @@ export default class TimelineItemTask extends NavigationMixin(LightningElement) 
         if(this.hasMoreThan2Recipients){
             return ` ${this.label.and} ${this.recipientCount-1} ${this.label.others}`;
         }
+    }
+
+    get shouldNavigateToRecord(){
+        return this.navigationBehaviour != 'None';
     }
     
     navigateToOwner() {
