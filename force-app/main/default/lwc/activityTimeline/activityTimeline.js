@@ -301,10 +301,12 @@ export default class ActivityTimeline extends LightningElement {
                 });
                 if(tasksAndChildRecords.length>0){
                     monthItem.firstOfMonth = moment(key).format("YYYY-MM-01");
+                    var parts = monthItem.firstOfMonth.split('-');
+                    var localDate = new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, 1);
                     const formatted = new Intl.DateTimeFormat(LANG, {
                         month: 'long',
                         year: 'numeric'
-                    }).format(Date.parse(monthItem.firstOfMonth));
+                    }).format(localDate);
                     monthItem.monthValue = formatted;
                     //If the month is current month don't set the timeFromNow
                     if(!(moment(new Date()).format("YYYY-MM")===moment(monthItem.firstOfMonth).format("YYYY-MM"))){
