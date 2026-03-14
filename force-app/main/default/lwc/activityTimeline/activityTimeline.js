@@ -301,10 +301,14 @@ export default class ActivityTimeline extends LightningElement {
                 });
                 if(tasksAndChildRecords.length>0){
                     monthItem.firstOfMonth = moment(key).format("YYYY-MM-01");
+                    monthItem.secondDayOfMonth = moment(key).format("YYYY-MM-02");
+                    //console.log('second day of month: ' + monthItem.secondDayOfMonth);
                     const formatted = new Intl.DateTimeFormat(LANG, {
                         month: 'long',
                         year: 'numeric'
-                    }).format(Date.parse(monthItem.firstOfMonth));
+                    }).format(Date.parse(monthItem.secondDayOfMonth));
+                    //console.log('parsed date from month value: ' + Date.parse(monthItem.secondDayOfMonth));
+                    //console.log('formatted month: ' + formatted);
                     monthItem.monthValue = formatted;
                     //If the month is current month don't set the timeFromNow
                     if(!(moment(new Date()).format("YYYY-MM")===moment(monthItem.firstOfMonth).format("YYYY-MM"))){
