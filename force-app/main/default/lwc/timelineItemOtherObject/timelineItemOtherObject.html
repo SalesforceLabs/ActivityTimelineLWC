@@ -66,7 +66,8 @@
 
                     <template if:true={expanded}>
                         <div
-                            class="slds-box slds-theme_shade slds-m-top_x-small slds-m-horizontal_xx-small slds-p-around_medium">
+                            class="slds-box slds-theme_shade slds-m-top_x-small slds-m-horizontal_xx-small slds-p-around_medium"
+                            style="max-height: 500px;overflow: auto;">
                             <c-timeline-item-detail field-data={fieldData}></c-timeline-item-detail>
                         </div>
                     </template>
