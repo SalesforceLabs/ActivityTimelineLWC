@@ -215,10 +215,30 @@ public with sharing class RecordTimelineDataProvider {
                 apexResp.apexData=provider.getData(recordId, dateFilter);
                 apexResp.recordIdentifierField=provider.getRecordIdentifierField();
                 apexResp.baseUrlForRecordDetail=provider.getBaseUrlForRecordDetail();
-                apexResp.fieldsWithTypes=provider.getFieldsToDisplayWithTypes();
                 apexResp.isSalesforceObject=provider.isSalesforceObject();
                 apexResp.isUiApiNotSupported=provider.isUiApiNotSupported();
-				apexData.put(childObjConf.Id, apexResp);
+
+                List<TimelineFieldType> fieldsWithTypes = provider.getFieldsToDisplayWithTypes();
+
+                // If the provider does not supply field type metadata, derive it from Fields_to_Display__c
+                // on the config record using schema describe so labels and types come from org metadata.
+                if ((fieldsWithTypes == null || fieldsWithTypes.isEmpty())
+                        && !String.isBlank(childObjConf.Fields_to_Display__c)
+                        && !String.isBlank(childObjConf.Object__c)) {
+                    fieldsWithTypes = new List<TimelineFieldType>();
+                    Map<String, Schema.SObjectField> fieldMap =
+                        Schema.getGlobalDescribe().get(childObjConf.Object__c).getDescribe().fields.getMap();
+                    for (String fieldApiName : childObjConf.Fields_to_Display__c.split(',')) {
+                        String trimmed = fieldApiName.trim();
+                        if (fieldMap.containsKey(trimmed.toLowerCase())) {
+                            Schema.DescribeFieldResult dfr = fieldMap.get(trimmed.toLowerCase()).getDescribe();
+                            fieldsWithTypes.add(new TimelineFieldType(dfr.getLabel(), trimmed, dfr.getType()));
+                        }
+                    }
+                }
+
+                apexResp.fieldsWithTypes = fieldsWithTypes;
+                apexData.put(childObjConf.Id, apexResp);
             }
         }
         return apexData;
