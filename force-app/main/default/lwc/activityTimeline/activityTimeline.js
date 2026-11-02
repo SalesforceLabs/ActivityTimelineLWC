@@ -441,6 +441,11 @@ export default class ActivityTimeline extends LightningElement {
             }
             childRec.monthValue = moment(childRec.dateValueDB).format("YYYY-MM-01");
     
+            // Resolve the effective isUiApiNotSupported from the provider (not just the config record)
+            // before building expandedFieldsToDisplay so the correct branch is taken.
+            if (config.timeline__Data_Provider_Type__c === "Apex class") {
+                childRec.isUiApiNotSupported = apexConfigAndData.isUiApiNotSupported;
+            }
             let fldsToDisplay = config.timeline__Fields_to_Display__c.split(',');
             if (!childRec.isUiApiNotSupported) {
                 childRec.expandedFieldsToDisplay = new Array();
@@ -457,7 +462,6 @@ export default class ActivityTimeline extends LightningElement {
                 childRec.recordId = recordData[apexConfigAndData.recordIdentifierField];
                 childRec.baseUrlForRecordDetail = apexConfigAndData.baseUrlForRecordDetail;
                 childRec.isSalesforceObject = apexConfigAndData.isSalesforceObject;
-                childRec.isUiApiNotSupported=  apexConfigAndData.isUiApiNotSupported;
             } else {
                 childRec.isExternalServiceData = false;
                 childRec.recordId = recordData.Id;
